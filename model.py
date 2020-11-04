@@ -23,10 +23,10 @@ class Category(db.Model):
     __tablename__ = 'categories'
      
     category_id = db.Column(db.Integer, primary_key=True)
-    category = db.Column(db.String) #Value is an array, big issue, use to display category info to user 
+    title = db.Column(db.String) #Value is an array, big issue, use to display category info to user 
 
     def __repr__(self):
-        return f'<Category category_id={self.category_id} category={self.category}>'
+        return f'<Category category_id={self.category_id} category_title={self.title}>'
 
 
 
@@ -65,12 +65,11 @@ class Transaction (db.Model):
     __tablename__ = 'transactions'
      
     transaction_id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Integer)  #amount needs to be float not int
+    amount = db.Column(db.Float)  #amount needs to be float not int
     category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id')) # Use to group by and determine budget 
     date =  db.Column(db.DateTime)
     name = db.Column(db.String)
     account_id = db.Column(db.Integer, db.ForeignKey('accounts.account_id'))
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     budget_id = db.Column(db.Integer, db.ForeignKey('budgets.budget_id'))
 
@@ -99,9 +98,5 @@ def connect_to_db(flask_app, db_uri='postgresql:///budgetapp', echo=False):
 
 if __name__ == '__main__':
     from server import app
-
-    # Call connect_to_db(app, echo=False) if your program output gets
-    # too annoying; this will tell SQLAlchemy not to print out every
-    # query it executes.
 
     connect_to_db(app)

@@ -145,10 +145,13 @@ def get_transactions():
   end_date = '{:%Y-%m-%d}'.format(datetime.datetime.now())
   try:
     transactions_response = client.Transactions.get(access_token, start_date, end_date)
+
   except plaid.errors.PlaidError as e:
     return jsonify(format_error(e))
   pretty_print_response(transactions_response)
   return jsonify(transactions_response)
+
+
 
 # Retrieve Identity data for an Item
 # https://plaid.com/docs/#identity
