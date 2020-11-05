@@ -53,11 +53,11 @@ class Account(db.Model):
     __tablename__ = 'accounts'
      
     account_id = db.Column(db.Integer, primary_key=True)
-    balances = db.Column(db.Integer) #nested dict need value for [available]
+    available_balance = db.Column(db.Float) #nested dict need value for [available]
     type = db.Column(db.String)
 
     def __repr__(self):
-        return f'<Account account_id={self.account_id} balance={self.balances}>' #balances not finished 
+        return f'<Account account_id={self.account_id} balance={self.available_balance}>' #balances not finished 
 
 
 class Transaction (db.Model):
@@ -71,11 +71,10 @@ class Transaction (db.Model):
     name = db.Column(db.String)
     account_id = db.Column(db.Integer, db.ForeignKey('accounts.account_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    budget_id = db.Column(db.Integer, db.ForeignKey('budgets.budget_id'))
+
 
     account = db.relationship('Account', backref='transactions')
     user = db.relationship('User', backref='transactions')
-    budget = db.relationship('Budget', backref='transactions')
     category = db.relationship('Category', backref='transactions')
 
 

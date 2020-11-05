@@ -1,3 +1,5 @@
+"""CRUD operations."""
+
 from model import db, User, Category, Account, Budget, Transaction, connect_to_db
 from datetime import datetime 
 
@@ -40,11 +42,11 @@ def create_budget(spend_limit, start_date, end_date, user, category):
 
     return budget
 
-def create_account(account_id, balances, type):
+def create_account(account_id, available_balance, type):
     """Create and return a new account."""
 
     account = Account(account_id=account_id,
-                      balances=balances, 
+                      available_balance=available_balance, 
                       type=type)
 
     db.session.add(account)
@@ -52,13 +54,15 @@ def create_account(account_id, balances, type):
 
     return account
 
-def create_transaction(transaction_id, amount, date, name, account, budget, user, category):
+def create_transaction(transaction_id, amount, date, name, user, account, category):
     """Create and return a new transaction."""
 
     transaction = Transaction(transaction_id=transaction_id,
-                                amount=amount, 
-                                budget=budget, 
+                                amount=amount,
+                                date=date,
+                                name=name,  
                                 user=user, 
+                                account=account,
                                 category=category)
 
     db.session.add(transaction)

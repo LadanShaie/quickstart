@@ -4,11 +4,12 @@ import datetime
 import plaid
 import json
 import time
+import model
+import crud
 from flask import Flask
 from flask import render_template
 from flask import request
 from flask import jsonify
-
 
 app = Flask(__name__)
 
@@ -145,10 +146,13 @@ def get_transactions():
   end_date = '{:%Y-%m-%d}'.format(datetime.datetime.now())
   try:
     transactions_response = client.Transactions.get(access_token, start_date, end_date)
+    # trans = transactions_response['transactions']
 
   except plaid.errors.PlaidError as e:
     return jsonify(format_error(e))
   pretty_print_response(transactions_response)
+  # with open("transactions.json", "w") as write_file:
+  #   json.dump(transactions_response, write_file)
   return jsonify(transactions_response)
 
 
