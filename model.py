@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import backref
 
 db = SQLAlchemy()
 
@@ -22,7 +23,7 @@ class Category(db.Model):
 
     __tablename__ = 'categories'
      
-    category_id = db.Column(db.Integer, primary_key=True)
+    category_id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True)
     title = db.Column(db.String) #Value is an array, big issue, use to display category info to user 
 
     def __repr__(self):
@@ -36,9 +37,9 @@ class Budget(db.Model):
      
     budget_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'))
-    spend_limit = db.Column(db.Integer)
-    start_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
+    spend_limit = db.Column(db.Integer, nullable=False)
+    start_date = db.Column(db.DateTime, nullable=False)
+    end_date = db.Column(db.DateTime, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))  
 
     user = db.relationship('User', backref='budgets')
@@ -52,9 +53,10 @@ class Account(db.Model):
 
     __tablename__ = 'accounts'
      
-    account_id = db.Column(db.Integer, primary_key=True)
+    account_id = db.Column(db.String, primary_key=True)
     available_balance = db.Column(db.Float) #nested dict need value for [available]
     type = db.Column(db.String)
+    name=db.Column(db.String)
 
     def __repr__(self):
         return f'<Account account_id={self.account_id} balance={self.available_balance}>' #balances not finished 
@@ -64,24 +66,23 @@ class Transaction (db.Model):
 
     __tablename__ = 'transactions'
      
-    transaction_id = db.Column(db.Integer, primary_key=True)
+    transaction_id = db.Column(db.String, primary_key=True)
     amount = db.Column(db.Float)  #amount needs to be float not int
     category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id')) # Use to group by and determine budget 
     date =  db.Column(db.DateTime)
     name = db.Column(db.String)
-    account_id = db.Column(db.Integer, db.ForeignKey('accounts.account_id'))
+    account_id = db.Column(db.String, db.ForeignKey('accounts.account_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
 
     account = db.relationship('Account', backref='transactions')
     user = db.relationship('User', backref='transactions')
-    category = db.relationship('Category', backref='transactions')
-
+    category = db.relationship('Category', backref=db.backref('transactions', lazy='dynamic'))
 
     def __repr__(self):
         return f'<Transaction name={self.name} amount={self.amount}>'
 
-
+#need to make transaction_category table (many to many)
 
 
 def connect_to_db(flask_app, db_uri='postgresql:///budgetapp', echo=False):

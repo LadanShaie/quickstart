@@ -1,0 +1,160 @@
+{
+    "accounts": [
+      {
+        "account_id": "BXWX4NrvbphGwRdaalqvuwQVMrMwBQUw5pPE6",
+        "balances": {
+          "available": 100,
+          "current": 110,
+          "iso_currency_code": "USD",
+          "limit": null,
+          "unofficial_currency_code": null
+        },
+        "mask": "0000",
+        "name": "Plaid Checking",
+        "official_name": "Plaid Gold Standard 0% Interest Checking",
+        "subtype": "checking",
+        "type": "depository"
+      },
+      {
+        "account_id": "35x5yVQLA3toj9DxxyrzidRmEKEd3RCqbjp67",
+        "balances": {
+          "available": 200,
+          "current": 210,
+          "iso_currency_code": "USD",
+          "limit": null,
+          "unofficial_currency_code": null
+        },
+        "mask": "1111",
+        "name": "Plaid Saving",
+        "official_name": "Plaid Silver Standard 0.1% Interest Saving",
+        "subtype": "savings",
+        "type": "depository"
+      },
+      {
+        "account_id": "xMmMALERnaf6ygGee3vnuQvgDjDQMvsnPzojd",
+        "balances": {
+          "available": null,
+          "current": 1000,
+          "iso_currency_code": "USD",
+          "limit": null,
+          "unofficial_currency_code": null
+        },
+        "mask": "2222",
+        "name": "Plaid CD",
+        "official_name": "Plaid Bronze Standard 0.2% Interest CD",
+        "subtype": "cd",
+        "type": "depository"
+      },
+      {
+        "account_id": "db9bxeGN6oHyeMKrrDwNta75PePa97hZzbwKV",
+        "balances": {
+          "available": null,
+          "current": 410,
+          "iso_currency_code": "USD",
+          "limit": 2000,
+          "unofficial_currency_code": null
+        },
+        "mask": "3333",
+        "name": "Plaid Credit Card",
+        "official_name": "Plaid Diamond 12.5% APR Interest Credit Card",
+        "subtype": "credit card",
+        "type": "credit"
+      },
+      {
+        "account_id": "aDGDzJoPb1hn4kpLLyJPibgjWEWbogC7JEqwd",
+        "balances": {
+          "available": 43200,
+          "current": 43200,
+          "iso_currency_code": "USD",
+          "limit": null,
+          "unofficial_currency_code": null
+        },
+        "mask": "4444",
+        "name": "Plaid Money Market",
+        "official_name": "Plaid Platinum Standard 1.85% Interest Money Market",
+        "subtype": "money market",
+        "type": "depository"
+      },
+      {
+        "account_id": "4mdm9wMp5xfL9gdPPMQeinodz3znmoidVvePa",
+        "balances": {
+          "available": null,
+          "current": 320.76,
+          "iso_currency_code": "USD",
+          "limit": null,
+          "unofficial_currency_code": null
+        },
+        "mask": "5555",
+        "name": "Plaid IRA",
+        "official_name": null,
+        "subtype": "ira",
+        "type": "investment"
+      },
+      {
+        "account_id": "NXyXoVAMDlh463EppNaGF6WP4x467WiWpGvwE",
+        "balances": {
+          "available": null,
+          "current": 23631.9805,
+          "iso_currency_code": "USD",
+          "limit": null,
+          "unofficial_currency_code": null
+        },
+        "mask": "6666",
+        "name": "Plaid 401k",
+        "official_name": null,
+        "subtype": "401k",
+        "type": "investment"
+      },
+      {
+        "account_id": "PVAV8RmjDKUPVApggNw1sVM7PwPVlMf75eDRg",
+        "balances": {
+          "available": null,
+          "current": 65262,
+          "iso_currency_code": "USD",
+          "limit": null,
+          "unofficial_currency_code": null
+        },
+        "mask": "7777",
+        "name": "Plaid Student Loan",
+        "official_name": null,
+        "subtype": "student",
+        "type": "loan"
+      },
+      {
+        "account_id": "jz6zj3wknGUgP61qqVmrC31QWbW3y1T1m75eB",
+        "balances": {
+          "available": null,
+          "current": 56302.06,
+          "iso_currency_code": "USD",
+          "limit": null,
+          "unofficial_currency_code": null
+        },
+        "mask": "8888",
+        "name": "Plaid Mortgage",
+        "official_name": null,
+        "subtype": "mortgage",
+        "type": "loan"
+      }
+    ],
+    "item": {
+      "available_products": [
+        "assets",
+        "auth",
+        "balance",
+        "credit_details",
+        "identity",
+        "income",
+        "investments",
+        "liabilities"
+      ],
+      "billed_products": [
+        "transactions"
+      ],
+      "consent_expiration_time": null,
+      "error": null,
+      "institution_id": "ins_4",
+      "item_id": "MXVXp9ERDyhaDKzLLPBdiDBdKBrxMxuLWwe9R",
+      "webhook": ""
+    },
+    "request_id": "ZqvjuDDwVTXeo78"
+  }

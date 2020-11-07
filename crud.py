@@ -17,9 +17,11 @@ def create_user(email, password):
 
 def create_category(category_id, title):
     """Create and return a new category."""
-
-    category = Category(category_id=category_id, 
-                        title=title)
+    category = Category.query.filter_by(category_id=category_id).first()
+                    
+    #check if it exists in database to avoid repeating PK, if not add it
+    if not category:
+        category = Category(category_id=category_id, title=title)
 
     db.session.add(category)
     db.session.commit()
@@ -28,33 +30,34 @@ def create_category(category_id, title):
 
 
 
-def create_budget(spend_limit, start_date, end_date, user, category):
+def create_budget(spend_limit, start_date, end_date, user, category_id):
     """Create and return a new budget."""
 
     budget = Budget(spend_limit=spend_limit, 
                     start_date=start_date, 
                     end_date=end_date, 
                     user=user, 
-                    category=category)
+                    category_id=category_id)
 
     db.session.add(budget)
     db.session.commit()
 
     return budget
 
-def create_account(account_id, available_balance, type):
+def create_account(account_id, available_balance, type, name):
     """Create and return a new account."""
 
     account = Account(account_id=account_id,
                       available_balance=available_balance, 
-                      type=type)
+                      type=type,
+                      name=name)
 
     db.session.add(account)
     db.session.commit()
 
     return account
 
-def create_transaction(transaction_id, amount, date, name, user, account, category):
+def create_transaction(transaction_id, amount, date, name, user, account_id, category_id):
     """Create and return a new transaction."""
 
     transaction = Transaction(transaction_id=transaction_id,
@@ -62,8 +65,8 @@ def create_transaction(transaction_id, amount, date, name, user, account, catego
                                 date=date,
                                 name=name,  
                                 user=user, 
-                                account=account,
-                                category=category)
+                                account_id=account_id,
+                                category_id=category_id)
 
     db.session.add(transaction)
     db.session.commit()

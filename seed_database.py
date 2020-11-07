@@ -14,8 +14,8 @@ model.connect_to_db(server.app)
 model.db.create_all()
 
 # Adding one user
-email = 'user@test.com' 
-password = 'test'
+email = 'user1@test.com' 
+password = 'test1'
 user= crud.create_user(email, password)
 
 # Load transaction data from JSON file
@@ -28,33 +28,42 @@ with open('data/balances.json') as f:
     
 
 # Populate category table in budgetapp db
+categories_in_db = []
 for item in transaction_data['transactions']:
-        category_id, title = (item['category_id'],
-                              item['category'])
-
-        crud.create_category(category_id,
+        category_id = (item['category_id'])
+        title = (item['category']) #It stores as a dict not a list or str. 
+      
+        db_category = crud.create_category(category_id,
                             title)
 
+        categories_in_db.append(db_category)
+
+# Populate budget table in budgetapp db ,maybe later 
+
+
+        
 # Populate account table in budgetapp db
 for item in balances_data['accounts']:
-        account_id, type = (item['account_id'],
-                            item['type'])
+        account_id, type, name = (item['account_id'],
+                            item['type'],
+                            item['name'])
 
         available_balance = (item['balances']['available'])
 
         crud.create_account(account_id,
                             available_balance,
-                            type)
+                            type,
+                            name)
 
 
 # Populate transaction table in budgetapp db + store transactions in list 
-
+transactions_in_db = []
 for item in transaction_data['transactions']:
-        transaction_id, amount, name, account_id, = (item['transaction_id'],
-                                        item['amount'],
-                                        item['name'],
-                                        item['account_id'],
-                                        item['category_id'])
+        transaction_id, amount, name, account_id, category_id = (item['transaction_id'],
+                                                    item['amount'],
+                                                    item['name'],
+                                                    item['account_id'],
+                                                    item['category_id'])
 
         date = datetime.strptime(item['date'], '%Y-%m-%d')
 
@@ -63,11 +72,15 @@ for item in transaction_data['transactions']:
                                                 date=date,
                                                 name=name,  
                                                 user=user, 
-                                                account=account,
-                                                category=category)
+                                                account_id=account_id,
+                                                category_id=category_id)
 
-                                                #question on category and acccount 
+        transactions_in_db.append(db_transaction)
 
+    #blocker: how to populate fk in transaction table when primary key wasn't autoincremented. What about category and acccount parameters? 
+    # 
+    # how to move transactions reponse to this file
+    # api call keep in server.py after data added to db?
     # transactions_in_db = []
     # transactions_in_db.append(db_transaction)
 
