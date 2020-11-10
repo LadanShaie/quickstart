@@ -14,9 +14,10 @@ model.connect_to_db(server.app)
 model.db.create_all()
 
 # Adding one user
+user_name= 'Testy'
 email = 'user1@test.com' 
 password = 'test1'
-user= crud.create_user(email, password)
+user= crud.create_user(user_name, email, password)
 
 # Load transaction data from JSON file
 with open('data/transactions.json') as f:
@@ -38,8 +39,7 @@ for item in transaction_data['transactions']:
 
         categories_in_db.append(db_category)
 
-# Populate budget table in budgetapp db ,maybe later 
-
+# Populate budget table in budgetapp db , LATER through user inputs. 
 
         
 # Populate account table in budgetapp db

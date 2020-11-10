@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Budget Therapy Home{% endblock %}
+
+{% block body %}
+  <h1>Welcome!</h1>
+
+  <h2>Login or Create an Account</h2>
+
+    <form action="/" method='POST' >
+            <input type="submit" name="login" value="Login" />
+            <input type="submit" name="create_account" value="Create an account" />
+    </form>
+{% endblock %}

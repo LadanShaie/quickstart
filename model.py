@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import backref
+
 
 db = SQLAlchemy()
 
@@ -11,6 +11,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer,
                         autoincrement=True,
                         primary_key=True)
+    user_name = db.Column(db.String, unique=True)
     email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
 
@@ -36,6 +37,7 @@ class Budget(db.Model):
     __tablename__ = 'budgets'
      
     budget_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    status = db.Column(db.String)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'))
     spend_limit = db.Column(db.Integer, nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
