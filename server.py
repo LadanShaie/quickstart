@@ -8,15 +8,21 @@ from model import connect_to_db
 import crud
 from flask import (Flask, render_template, request, flash, session,
                    redirect)
+# from flask_session import Session
 
 from jinja2 import StrictUndefined
 
+
+# app.config['SECRET_KEY']= "devhhjdjciijkdjjkkkdkkhebbfhhfuksne" 
+# app.config['SESSION_TYPE'] = 'filesystem'
+# app.config['SESSION_PERMANENT']= False 
+# Session(app)
+
+
+
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY') 
+app.secret_key = "devhhjdjciijkdjjkkkdkkhebbfhhfuksne"
 app.jinja_env.undefined = StrictUndefined
-
-app = Flask(__name__)
-
 
 @app.route('/', methods=['GET'])
 def show_homepage(): 
@@ -71,12 +77,12 @@ def login():
 @app.route('/login', methods=['POST'])
 def login_info():
     """Allow user to login by verfication + Store login info in db""" 
-    
+
     email = request.form.get('email')
-    password = request.form['password']
+    password = request.form.get('password')
     user = crud.get_user_by_email(email)
     if user:  
-        if user.password == password: 
+        if password == user.password: 
             session['user_id'] = user.user_id
             return redirect('/overview')
     
@@ -88,6 +94,13 @@ def login_info():
 @app.route('/overview', methods=['GET'])
 def overview_data():
     """View transactions and account balance information"""
+
+    user = crud.get_user_by_user_id(session['user_id'])
+    return render_template('overview.html', transactions = user.transactions, accounts = user.accounts)
+    
+    # #Movie ratings lab 
+    # transactions = crud.get_transactions()
+    # return render_template('overview.html', transactions=transactions)
 
 
 

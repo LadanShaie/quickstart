@@ -4,8 +4,22 @@ Base
 
 */
 
+.navbar {
+	background-color: #228B22;
+	color: white;
+	border-radius: 0px;
+}
+
+#ubermelon-logo, #ubermelon-logo:hover, .navbar-dark .navbar-brand {
+	color: white;
+}
+
+.navbar-nav>li>a, .navbar-dark .navbar-nav .nav-link {
+	color: white;
+}
+
 body {
-  background: #ffffff;
+  background:#F5FFFA;
 }
 
 .main {

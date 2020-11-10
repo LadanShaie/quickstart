@@ -59,6 +59,9 @@ class Account(db.Model):
     available_balance = db.Column(db.Float) #nested dict need value for [available]
     type = db.Column(db.String)
     name=db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id')
+    )
+    user = db.relationship('User', backref='accounts')
 
     def __repr__(self):
         return f'<Account account_id={self.account_id} balance={self.available_balance}>' #balances not finished 

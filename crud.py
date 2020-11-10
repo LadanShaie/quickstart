@@ -1,7 +1,8 @@
 """CRUD operations."""
 
 from model import db, User, Category, Account, Budget, Transaction, connect_to_db
-from datetime import datetime 
+from datetime import datetime
+
 
 
 def create_user(user_name, email, password):
@@ -46,13 +47,14 @@ def create_budget(status, spend_limit, start_date, end_date, user, category_id):
 
     return budget
 
-def create_account(account_id, available_balance, type, name):
+def create_account(account_id, available_balance, type, name, user):
     """Create and return a new account."""
 
     account = Account(account_id=account_id,
                       available_balance=available_balance, 
                       type=type,
-                      name=name)
+                      name=name,
+                      user=user)
 
     db.session.add(account)
     db.session.commit()
@@ -75,11 +77,29 @@ def create_transaction(transaction_id, amount, date, name, user, account_id, cat
 
     return transaction
 
-# CRUD functions for web app flow
+# CRUD functions for sessions and web app flow
 def get_user_by_email(email):
-    """Return a user by email."""
+    """Find a user by email"""
 
     return User.query.filter(User.email == email).first()
+
+
+
+def get_user_by_user_id(user_id): 
+    """Find user by user_id"""
+
+    return User.query.get(user_id) 
+
+# def get_amount_by_merchant():
+#     Transaction.query.with_entities(func.sum(Transaction.amount)).filter(Transaction.amount > 0).order_by(Transaction.name).all()
+#     print (Transaction.name)
+
+# SQL version: SELECT name, SUM(amount) FROM transactions GROUP BY name;
+
+def get_transactions():
+    """Return all transactions."""
+
+    return Transaction.query.all()
 
 if __name__ == '__main__':
     from server import app

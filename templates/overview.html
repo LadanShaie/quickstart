@@ -1,2 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Overview Page{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row align-items-left">
+        <label class="balance_box_title"><h2>Accounts</h2></label>
+        </div>
+    </div>
+    <div class="content-center">
+        {% for account in accounts %}
+            {% if account.type == "depository" %}
+            <h5>{{account.name}} {{account.available_balance}}</h5>
+            {% endif %}  
+        {% endfor %}
+    </div>
+
+
+   
+    <div class="row justify-content-center">
+        <label class="Table_title"><h2>Transaction History</h2></label>
+    </div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Date</th>
+                </tr>
+                </thead>
+                <tbody id="get-transactions-data">
+                {% for t in transactions %}
+                    <tr>
+                    <td> {{t.name}} </td>
+                    <td> {{t.amount}} </td>
+                    <td>  {{t.date}} </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table> 
+
+{% endblock %}
+
+<!-- Hi {user.user_name}
 view a list of transactions and balance.
-include a link to view budgets and status
+include a link to view budgets and status -->

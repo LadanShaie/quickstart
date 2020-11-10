@@ -53,7 +53,8 @@ for item in balances_data['accounts']:
         crud.create_account(account_id,
                             available_balance,
                             type,
-                            name)
+                            name,
+                            user)
 
 
 # Populate transaction table in budgetapp db + store transactions in list 
