@@ -18,17 +18,17 @@
             </thead>
             <tbody id="get-transactions-data">
             {% for budget in budgets %}
-                {% if budget.budget_id >= 1 %}
+                <!-- {% if budget.budget_id >= 1 %} -->
                     <tr>
                     <td> {{budget.merchant_name}} </td>
-                    <td> {{budget.amount}} </td>
+                    <td> {{budget.spend_limit}} </td>
                     <td>  {{budget.start_date}} </td>
                     <td>  {{budget.end_date}} </td>
-                    <td>  {{budget.status}} </td>
+                    <td> <a href="/budgets/{{ budget.budget_id }}"> {{budget.status}}  </a> </td>
                     </tr>
                 <!-- {% else %} doesn't work, ask for help later after api connected -->
-                    <h3>You Currently Have No Active Budgets, Click Create A Budget To Get Started!</h3>    
-                {% endif %}    
+                    <!-- <h3>You Currently Have No Active Budgets, Click Create A Budget To Get Started!</h3>     -->
+                <!-- {% endif %}     -->
             {% endfor %}
             </tbody>
         </table> 

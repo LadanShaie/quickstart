@@ -26,7 +26,10 @@ class Category(db.Model):
      
     category_id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True)
     title = db.Column(db.String) #Value is an array, big issue, use to display category info to user 
-    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))  
+
+    user = db.relationship('User', backref='categories')
+
     def __repr__(self):
         return f'<Category category_id={self.category_id} category_title={self.title}>'
 
@@ -36,6 +39,9 @@ class Merchant(db.Model):
     __tablename__ = 'merchants'
      
     merchant_name = db.Column(db.String, nullable=False, primary_key=True, unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))  
+
+    user = db.relationship('User', backref='merchants')
 
     def __repr__(self):
         return f'<Merchant merchant_name={self.merchant_name}>'
@@ -47,14 +53,12 @@ class Budget(db.Model):
     budget_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     status = db.Column(db.String)
     merchant_name = db.Column(db.String, db.ForeignKey('merchants.merchant_name'))
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'))
     spend_limit = db.Column(db.Integer, nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))  
 
     user = db.relationship('User', backref='budgets')
-    category = db.relationship('Category', backref='budgets')
     merchant = db.relationship('Merchant', backref='budgets')
 
     def __repr__(self):

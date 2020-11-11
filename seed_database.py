@@ -34,8 +34,7 @@ for item in transaction_data['transactions']:
         category_id = (item['category_id'])
         title = (item['category']) #It stores as a dict not a list or str. 
       
-        db_category = crud.create_category(category_id,
-                            title)
+        db_category = crud.create_category(category_id, title, user)
 
         categories_in_db.append(db_category)
 
@@ -45,7 +44,7 @@ merchant_names_in_db = []
 for item in transaction_data['transactions']:
         merchant_name = (item['name'])
       
-        db_merchant_name = crud.create_merchant_name(merchant_name)
+        db_merchant_name = crud.create_merchant_name(merchant_name, user)
                             
 
         merchant_names_in_db.append(db_merchant_name)
@@ -79,13 +78,14 @@ for item in transaction_data['transactions']:
 
         date = datetime.strptime(item['date'], '%Y-%m-%d')
 
-        db_transaction = crud.create_transaction(transaction_id=transaction_id,
-                                                amount=amount,
-                                                date=date,
-                                                merchant_name=merchant_name,  
-                                                user=user, 
-                                                account_id=account_id,
-                                                category_id=category_id)
+        db_transaction = crud.create_transaction(transaction_id,
+                                                amount,
+                                                date,
+                                                merchant_name,  
+
+                                                user, 
+                                                account_id,
+                                                category_id)
 
         transactions_in_db.append(db_transaction)
 

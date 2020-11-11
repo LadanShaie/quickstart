@@ -85,6 +85,26 @@ def login_info():
 
 
 
+@app.route('/overview', methods=['GET'])
+def overview_data():
+    """View transactions and account balance information"""
+
+    if session.get('user_id'):
+        user = crud.get_user_by_user_id(session['user_id'])
+        return render_template('overview.html', user_name=user.user_name, transactions = user.transactions, accounts = user.accounts)
+    else: 
+        flash('Please login to proceed to this page.')
+        return redirect('/login')    
+
+@app.route('/overview', methods=['POST'])
+def redirect_to_budgets():
+    """Redirect to budgets page after clicking on button at bottom of overview page"""
+
+    view_budgets_page = request.form.get('budgets_page')
+
+    if  view_budgets_page == 'View My Budgets':
+        return redirect('/budgets')
+
 
 
 
@@ -118,7 +138,7 @@ def get_create_budget():
 
     if session.get('user_id'):
         user = crud.get_user_by_user_id(session['user_id'])
-        return render_template('create_budget.html', transactions= user.transactions) #could user merchant table if you create user FK.
+        return render_template('create_budget.html', merchants= user.merchants) # user merchant table
     else: 
         flash('Please login to proceed to this page.')
         return redirect('/login')  
@@ -131,42 +151,33 @@ def save_created_budget():
         submit_budget_form = request.form.get("submit_budget_form")
 
         if  submit_budget_form  == 'Submit': 
-            merchant_name = request.form.get('merchant_selector_dropdown') #error here, check notes. references merchant table not transactions
-            amount = request.form.get('amount')
+            merchant_name = request.form.get('selected_merchant') 
+            spend_limit = request.form.get('amount')
             start_date = request.form.get('start_date') 
             end_date = request.form.get('end_date')
-            category_id = "13005043" #delete category from budget table 
             status= "active for storage" 
 
-            new_budget = crud.create_budget(session.get('user_id'), merchant_name, amount, start_date, end_date, category_id, status)
+            #gets user by session user_id
+            user = crud.get_user_by_user_id(session['user_id'])
+
+            new_budget = crud.create_budget(status, spend_limit, start_date, end_date, user, merchant_name)
             flash('New Budget Has Been Created!')
             return redirect(f'/budget/{new_budget.budget_id}')
             
         else: 
+            flash('An active budget already exsits for this merchant, you can view it in the budget tab')
             return redirect ('/create_budget')  
-
-
-
-
-@app.route('/overview', methods=['GET'])
-def overview_data():
-    """View transactions and account balance information"""
-
-    if session.get('user_id'):
-        user = crud.get_user_by_user_id(session['user_id'])
-        return render_template('overview.html', user_name=user.user_name, transactions = user.transactions, accounts = user.accounts)
     else: 
         flash('Please login to proceed to this page.')
-        return redirect('/login')    
+        return redirect('/login')
 
-@app.route('/overview', methods=['POST'])
-def redirect_to_budgets():
-    """Redirect to budgets page after clicking on button at bottom of overview page"""
+@app.route('/budgets/<budget_id>', methods=['GET'])
+def view_each_budget(budget_id):
+    """View each budget page"""
+    
+    budget = crud.get_budget_by_budget_id(budget_id)
+    return render_template('budget_status.html', status=budget.status)    
 
-    view_budgets_page = request.form.get('budgets_page')
-
-    if  view_budgets_page == 'View My Budgets':
-        return redirect('/budgets')
 
 
 
