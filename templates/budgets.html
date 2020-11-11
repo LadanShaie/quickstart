@@ -1,6 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}View All Budgets Page{% endblock %}
 
-1. no exsisting budgets (include link redirect to create_budget.html) 
+{% block body %}
 
-2. otherwise, list exsisting active budgets and their status include buttonlink on left side of each budget row to see status then render either green or red html template. (add status in budget table to model.py) 
+<div class="row justify-content-center">
+    <label class="Table_title"><h2>Your Active Budgets</h2></label>
+</div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody id="get-transactions-data">
+            {% for budget in budgets %}
+                {% if budget.budget_id >= 1 %}
+                    <tr>
+                    <td> {{budget.merchant_name}} </td>
+                    <td> {{budget.amount}} </td>
+                    <td>  {{budget.start_date}} </td>
+                    <td>  {{budget.end_date}} </td>
+                    <td>  {{budget.status}} </td>
+                    </tr>
+                <!-- {% else %} doesn't work, ask for help later after api connected -->
+                    <h3>You Currently Have No Active Budgets, Click Create A Budget To Get Started!</h3>    
+                {% endif %}    
+            {% endfor %}
+            </tbody>
+        </table> 
 
-3. in future, if no exsisting budget say 'no active budget' AND include button to see past/inactive ones by loop through budget table in db 
+
+<div class="row justify-content-center">
+    <form action="/budgets" method='POST' >
+        <input type="submit" name="create_budget_page" value="Create A New Budget"/>
+    </form> 
+</div>
+
+
+
+{% endblock %}
+
+<!-- redirects to this page after user log in + link bank index html plaid. no exsisting budgets (include link redirect to create_budget.html). otherwise, list exsisting active budgets and their status include buttonlink on left side of each budget row to see status then render either green or red html template. (add status in budget table to model.py).in future, if no exsisting budget say 'no active budget' AND include button to see past/inactive ones by loop through budget table in db  -->

@@ -2,6 +2,8 @@
 {% block title %}Overview Page{% endblock %}
 
 {% block body %}
+<h1>Hi {{user_name}},</h1>
+
     <div class="container-fluid">
         <div class="row align-items-left">
         <label class="balance_box_title"><h2>Accounts</h2></label>
@@ -10,7 +12,7 @@
     <div class="content-center">
         {% for account in accounts %}
             {% if account.type == "depository" %}
-            <h5>{{account.name}} {{account.available_balance}}</h5>
+            <h5>{{account.name}}   ${{account.available_balance}}</h5>
             {% endif %}  
         {% endfor %}
     </div>
@@ -31,13 +33,20 @@
                 <tbody id="get-transactions-data">
                 {% for t in transactions %}
                     <tr>
-                    <td> {{t.name}} </td>
+                    <td> {{t.merchant_name}} </td>
                     <td> {{t.amount}} </td>
                     <td>  {{t.date}} </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table> 
+
+
+     <div class="row justify-content-center">
+        <form action="/overview" method='POST' >
+            <input type="submit" name="budgets_page" value="View My Budgets"/>
+        </form> 
+    </div>
 
 {% endblock %}
 

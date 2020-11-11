@@ -1,6 +1,6 @@
 """CRUD operations."""
 
-from model import db, User, Category, Account, Budget, Transaction, connect_to_db
+from model import db, User, Category, Merchant, Account, Budget, Transaction, connect_to_db
 from datetime import datetime
 
 
@@ -31,8 +31,22 @@ def create_category(category_id, title):
     return category
 
 
+def create_merchant_name(merchant_name):
+    """Create and return a new merchant name."""
+    name = Merchant.query.filter_by(merchant_name=merchant_name).first()
+                    
+    #check if it exists in database to avoid repeating PK, if not add it
+    if not name:
+        name = Merchant(merchant_name=merchant_name)
 
-def create_budget(status, spend_limit, start_date, end_date, user, category_id):
+    db.session.add(name)
+    db.session.commit()
+
+    return name
+
+
+
+def create_budget(status, spend_limit, start_date, end_date, user, category_id, merchant_name):
     """Create and return a new budget."""
 
     budget = Budget(status=status,
@@ -40,7 +54,8 @@ def create_budget(status, spend_limit, start_date, end_date, user, category_id):
                     start_date=start_date, 
                     end_date=end_date, 
                     user=user, 
-                    category_id=category_id)
+                    category_id=category_id,
+                    merchant_name=merchant_name)
 
     db.session.add(budget)
     db.session.commit()
@@ -61,13 +76,13 @@ def create_account(account_id, available_balance, type, name, user):
 
     return account
 
-def create_transaction(transaction_id, amount, date, name, user, account_id, category_id):
+def create_transaction(transaction_id, amount, date, merchant_name, user, account_id, category_id):
     """Create and return a new transaction."""
 
     transaction = Transaction(transaction_id=transaction_id,
                                 amount=amount,
                                 date=date,
-                                name=name,  
+                                merchant_name=merchant_name,  
                                 user=user, 
                                 account_id=account_id,
                                 category_id=category_id)

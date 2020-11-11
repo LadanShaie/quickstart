@@ -26,11 +26,19 @@ class Category(db.Model):
      
     category_id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True)
     title = db.Column(db.String) #Value is an array, big issue, use to display category info to user 
-
+    
     def __repr__(self):
         return f'<Category category_id={self.category_id} category_title={self.title}>'
 
 
+class Merchant(db.Model):
+
+    __tablename__ = 'merchants'
+     
+    merchant_name = db.Column(db.String, nullable=False, primary_key=True, unique=True)
+
+    def __repr__(self):
+        return f'<Merchant merchant_name={self.merchant_name}>'
 
 class Budget(db.Model):
 
@@ -38,6 +46,7 @@ class Budget(db.Model):
      
     budget_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     status = db.Column(db.String)
+    merchant_name = db.Column(db.String, db.ForeignKey('merchants.merchant_name'))
     category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id'))
     spend_limit = db.Column(db.Integer, nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
@@ -46,6 +55,7 @@ class Budget(db.Model):
 
     user = db.relationship('User', backref='budgets')
     category = db.relationship('Category', backref='budgets')
+    merchant = db.relationship('Merchant', backref='budgets')
 
     def __repr__(self):
         return f'<Budget budget_id={self.budget_id} spend_limit={self.spend_limit}>'
@@ -59,8 +69,8 @@ class Account(db.Model):
     available_balance = db.Column(db.Float) #nested dict need value for [available]
     type = db.Column(db.String)
     name=db.Column(db.String)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id')
-    )
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+
     user = db.relationship('User', backref='accounts')
 
     def __repr__(self):
@@ -74,8 +84,8 @@ class Transaction (db.Model):
     transaction_id = db.Column(db.String, primary_key=True)
     amount = db.Column(db.Float)  #amount needs to be float not int
     category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id')) # Use to group by and determine budget 
-    date =  db.Column(db.DateTime)
-    name = db.Column(db.String)
+    date = db.Column(db.DateTime)
+    merchant_name = db.Column(db.String, db.ForeignKey('merchants.merchant_name'))
     account_id = db.Column(db.String, db.ForeignKey('accounts.account_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
@@ -83,6 +93,7 @@ class Transaction (db.Model):
     account = db.relationship('Account', backref='transactions')
     user = db.relationship('User', backref='transactions')
     category = db.relationship('Category', backref=db.backref('transactions', lazy='dynamic'))
+    merchant = db.relationship('Merchant', backref=db.backref('transactions', lazy='dynamic'))
 
     def __repr__(self):
         return f'<Transaction name={self.name} amount={self.amount}>'

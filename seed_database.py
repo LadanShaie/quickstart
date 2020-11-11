@@ -39,6 +39,17 @@ for item in transaction_data['transactions']:
 
         categories_in_db.append(db_category)
 
+
+# Populate Merchant_Name table in budgetapp db
+merchant_names_in_db = []
+for item in transaction_data['transactions']:
+        merchant_name = (item['name'])
+      
+        db_merchant_name = crud.create_merchant_name(merchant_name)
+                            
+
+        merchant_names_in_db.append(db_merchant_name)
+
 # Populate budget table in budgetapp db , LATER through user inputs. 
 
         
@@ -60,7 +71,7 @@ for item in balances_data['accounts']:
 # Populate transaction table in budgetapp db + store transactions in list 
 transactions_in_db = []
 for item in transaction_data['transactions']:
-        transaction_id, amount, name, account_id, category_id = (item['transaction_id'],
+        transaction_id, amount, merchant_name, account_id, category_id = (item['transaction_id'],
                                                     item['amount'],
                                                     item['name'],
                                                     item['account_id'],
@@ -71,7 +82,7 @@ for item in transaction_data['transactions']:
         db_transaction = crud.create_transaction(transaction_id=transaction_id,
                                                 amount=amount,
                                                 date=date,
-                                                name=name,  
+                                                merchant_name=merchant_name,  
                                                 user=user, 
                                                 account_id=account_id,
                                                 category_id=category_id)
