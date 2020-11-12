@@ -1,8 +1,45 @@
 {% extends 'base.html' %}
-{% block title %}Overview Page{% endblock %}
+{% block title %}Status Page{% endblock %}
 
 {% block body %}
-<h1>budget Status: {{ status }}</h1>
+<h1>Hello</h1>
+
+    {% set budget.start_date|int %}
+    {% set budget.end_date|int %}
+    {% set current_date|int %}
+    {% set transaction.date|int %}
+    {% set transaction.amount|int %}
+    {% set budget.spend_limit|int %}
+
+
+        {% if budget.end_date > current_date %}
+            {% for transaction in transactions %}
+                {% if (transaction.merchant_name == budget.merchant_name) and (transaction.date > budget.start_date) and (budget.end_date > transaction.date) %}
+                    {% if (transaction.amount > budget.spend_limit) %}
+                        <h2>{{budget.merchant_name}} budget Status: Your Tree Died! </h2>
+                        <h3> You went over budget for {{budget.merchant_name}} </h3> 
+                        <!-- insert img of dead tree -->
+                    {% elif (budget.spend_limit > transaction.amount) or (transaction.amount == budget.spend_limit) %} 
+                        <h2>{{budget.merchant_name}} budget Status: Your Tree Is Alive! </h2>
+                        <h3> Good job! Continue to stay in budget to keep your tree alive </h3> 
+                        <!-- insert img of dead tree --> 
+                    {% endif %} 
+                {% endif %} 
+            {% endfor %} 
+        {% else %} 
+            <h1>bye</h1> 
+        {% endif %}     
+
+    <!-- extra feature show how much they have left in the budget or how much they went over by in the period.                   -->
+                     
+    {% endset %} 
+    {% endset %} 
+    {% endset %} 
+    {% endset %} 
+    {% endset %} 
+    {% endset %}          
+            
+    
 
 
 {% endblock %}

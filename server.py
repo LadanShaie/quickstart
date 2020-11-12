@@ -1,6 +1,6 @@
 import base64
 import os
-import datetime
+from datetime import datetime
 import plaid
 import json
 import time
@@ -173,10 +173,18 @@ def save_created_budget():
 
 @app.route('/budgets/<budget_id>', methods=['GET'])
 def view_each_budget(budget_id):
-    """View each budget page"""
-    
-    budget = crud.get_budget_by_budget_id(budget_id)
-    return render_template('budget_status.html', status=budget.status)    
+    """View a budget status page"""
+
+    if session.get('user_id'):
+        user = crud.get_user_by_user_id(session['user_id'])
+        current_date = datetime.now()
+        # print (current_date)
+        # current_date= "2020-11-12 0:0:0.0"
+        budget = crud.get_budget_by_budget_id(budget_id)
+        return render_template('budget_status.html', budget=budget, current_date=current_date, transactions=user.transactions)
+    else: 
+        flash('Please login to proceed to this page.')
+        return redirect('/login')        
 
 
 
