@@ -100,7 +100,7 @@ class Transaction (db.Model):
     merchant = db.relationship('Merchant', backref=db.backref('transactions', lazy='dynamic'))
 
     def __repr__(self):
-        return f'<Transaction name={self.name} amount={self.amount}>'
+        return f'<Transaction merchant_name={self.merchant_name} amount={self.amount}>'
 
 #need to make transaction_category table (many to many)
 

@@ -91,7 +91,7 @@ def overview_data():
 
     if session.get('user_id'):
         user = crud.get_user_by_user_id(session['user_id'])
-        return render_template('overview.html', user_name=user.user_name, transactions = user.transactions, accounts = user.accounts)
+        return render_template('overview.html', transactions = user.transactions, accounts = user.accounts)
     else: 
         flash('Please login to proceed to this page.')
         return redirect('/login')    
@@ -115,7 +115,7 @@ def get_budgets():
     if session.get('user_id'):
         user = crud.get_user_by_user_id(session['user_id'])
         #flash('You made it!') #Test flash since not working, printing directly on screen, I want pop up 
-        return render_template('budgets.html', budgets= user.budgets)
+        return render_template('budgets.html', user_name=user.user_name, budgets= user.budgets)
     else: 
         flash('Please login to proceed to this page.')
         return redirect('/login')  
@@ -171,17 +171,20 @@ def save_created_budget():
         flash('Please login to proceed to this page.')
         return redirect('/login')
 
+
 @app.route('/budgets/<budget_id>', methods=['GET'])
 def view_each_budget(budget_id):
     """View a budget status page"""
 
     if session.get('user_id'):
-        user = crud.get_user_by_user_id(session['user_id'])
-        current_date = datetime.now()
+        # user = crud.get_user_by_user_id(session['user_id'])
         # print (current_date)
         # current_date= "2020-11-12 0:0:0.0"
-        budget = crud.get_budget_by_budget_id(budget_id)
-        return render_template('budget_status.html', budget=budget, current_date=current_date, transactions=user.transactions)
+        budget_status=crud.get_budget_status_by_budget_id(budget_id)
+        # print (budget_status)
+        return render_template('budget_status.html', budget_status=budget_status)
+
+        # return render_template('budget_status.html', budget=budget, current_date=current_date, transactions=user.transactions)
     else: 
         flash('Please login to proceed to this page.')
         return redirect('/login')        

@@ -4,7 +4,7 @@
 {% block body %}
 
 <div class="row justify-content-center">
-    <label class="Table_title"><h2>Your Active Budgets</h2></label>
+    <label class="Table_title"><h2>{{user_name}}'s Budgets</h2></label>
 </div>
         <table class="table table-hover">
             <thead>
@@ -24,7 +24,7 @@
                     <td> {{budget.spend_limit}} </td>
                     <td>  {{budget.start_date}} </td>
                     <td>  {{budget.end_date}} </td>
-                    <td> <a href="/budgets/{{ budget.budget_id }}"> {{budget.status}}  </a> </td>
+                    <td> <a href="/budgets/{{ budget.budget_id }}"> View Status  </a> </td>
                     </tr>
                 <!-- {% else %} doesn't work, ask for help later after api connected -->
                     <!-- <h3>You Currently Have No Active Budgets, Click Create A Budget To Get Started!</h3>     -->

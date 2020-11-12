@@ -2,6 +2,7 @@
 
 from model import db, User, Category, Merchant, Account, Budget, Transaction, connect_to_db
 from datetime import datetime
+from decimal import Decimal as D
 
 
 
@@ -134,6 +135,30 @@ def get_budget_by_budget_id(budget_id):
     """Return budget by budget_id."""
 
     return Budget.query.get(1)
+
+# budget status function
+def get_budget_status_by_budget_id(budget_id):
+    
+    budget = Budget.query.filter(Budget.budget_id == budget_id).first()
+    transactions= Transaction.query.all()
+    print(transactions) #working 
+
+    if budget.end_date > datetime.now():
+        print (budget.end_date) #working 
+
+        for transaction in transactions:
+            #print (transaction.merchant_name) #working
+
+            if (transaction.merchant_name == budget.merchant_name) and (transaction.date > budget.start_date) and (transaction.date < budget.end_date):
+
+                if sum(D(transaction.amount)) > budget.spend_limit:
+                    return  f'Uh oh! Your tree died! You spent over the ${budget.spend_limit} budget for {budget.merchant_name}.'
+                elif sum(D(transaction.amount)) < budget.spend_limit or sum(D(transaction.amount)) == budget.spend_limit: 
+                    return f"Your tree is still alive! You've been spending less than ${budget.spend_limit} at {budget.merchant_name} since {budget.start_date}"
+
+            elif (transaction.merchant_name == budget.merchant_name):
+                return f"Your tree is alive and well! You haven't spent a dime at {budget.merchant_name}."   
+
 
 
 
