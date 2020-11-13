@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Add A Transaction Page{% endblock %}
+
+{% block body %}
+<h2>Add New Transaction </h2>
+
+<form class="forms" name="transaction_form" action='/add_transaction' method="POST">
+
+    <div class="container-fluid"> 
+        <!-- Account_id form inputs required from user   -->    
+        <div class="form-group row">
+            <label for="-input" class="col-2 col-form-label">Select Account</label>
+            <div class="col-10">
+                <select class="input-box" name="selected_account">
+                    {% for account in accounts%}
+                        {% if account.type == "depository" %}   
+                    <option type="text" name= "account_options" value= "{{ account.account_id }}" > {{ account.name }} </option>
+                        {% endif %}    
+                    {% endfor %}
+                </select>
+            </div>
+        </div>  
+     <!-- merchant name input required from user    -->
+        <div class="form-group row">
+            <label for="example-text-input" class="col-2 col-form-label"> Merchant</label>
+            <div class="col-10">
+              <input class="form-control" type="text" name=merchant_name id="merchant-name-text-input">
+            </div> 
+        </div>
+
+        <!-- Amount input required from user    -->
+        <div class="form-group row">
+            <label for="example-number-input" class="col-2 col-form-label">Amount</label>
+            <div class="col-10">
+              <input class="form-control" type="number" name=amount id="amount-input">
+            </div>
+        </div>   
+
+     <!-- Date input required from user    -->
+        <div class="form-group row">
+            <label for="example-date-input" class="col-2 col-form-label"> Transaction Date </label>
+            <div class="col-10">
+                <input class="form-control" type="date" name=transaction_date id="end-date-input">
+            </div>
+        </div>
+
+    <!-- sumit form button    -->
+        <div class="row justify-content-center" >
+            <input type="submit" class="submit-btn" name= "submit_add_transaction_form" value="Submit">
+        </div>
+
+    </div>
+</form>    
+{% endblock %}

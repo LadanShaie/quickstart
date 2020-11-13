@@ -101,9 +101,13 @@ def redirect_to_budgets():
     """Redirect to budgets page after clicking on button at bottom of overview page"""
 
     view_budgets_page = request.form.get('budgets_page')
+    view_add_transaction_page = request.form.get("add_transactions_page")
 
     if  view_budgets_page == 'View My Budgets':
         return redirect('/budgets')
+    if  view_add_transaction_page == 'Add a new transaction':
+        return redirect('/add_transaction')    
+
 
 
 
@@ -162,7 +166,7 @@ def save_created_budget():
 
             new_budget = crud.create_budget(status, spend_limit, start_date, end_date, user, merchant_name)
             flash('New Budget Has Been Created!')
-            return redirect(f'/budget/{new_budget.budget_id}')
+            return redirect(f'/budgets/{new_budget.budget_id}')
             
         else: 
             flash('An active budget already exsits for this merchant, you can view it in the budget tab')
@@ -189,8 +193,44 @@ def view_each_budget(budget_id):
         flash('Please login to proceed to this page.')
         return redirect('/login')        
 
+@app.route('/add_transaction', methods=['GET'])
+def get_add_transaction():
+    """View add transaction form."""
+
+    if session.get('user_id'):
+        user = crud.get_user_by_user_id(session['user_id'])
+        return render_template('add_transactions.html', accounts=user.accounts)
+    else: 
+        flash('Please login to proceed to this page.')
+        return redirect('/login') 
 
 
+@app.route('/add_transaction', methods=['POST'])
+def save_added_transaction():
+    """Add A transactions and send it to db, user can view it after redirected back to the overview page."""    
+    
+    if session.get('user_id'):
+        submit_add_transaction_form = request.form.get("submit_add_transaction_form")
+
+        if  submit_add_transaction_form  == 'Submit': 
+            account_id = request.form.get("selected_account")
+            merchant_name = request.form.get('merchant_name') #Issue, if new merchant_name add this to merchant table in db
+            amount = request.form.get('amount')
+            date = request.form.get('transaction_date') 
+            #gets user by session user_id
+            user = crud.get_user_by_user_id(session['user_id'])
+
+            crud.create_transaction(amount, date, merchant_name, user, account_id)
+            crud.create_merchant_name(merchant_name, user)
+            flash('New transaction Has Been added!')
+            return redirect('/overview')
+            
+        else: 
+            flash('Sorry, something went wrong. Please try again.')
+            return redirect ('/add_transaction')  
+    else: 
+        flash('Please login to proceed to this page.')
+        return redirect('/login')
 
 
 

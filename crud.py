@@ -42,35 +42,36 @@ def create_merchant_name(merchant_name, user):
 
     db.session.add(name)
     db.session.commit()
-
+    
     return name
+
 
 
 
 def create_budget(status, spend_limit, start_date, end_date, user, merchant_name): # tried merchant_name got instance error
     """Create and return a new budget."""
-    budget = Budget.query.filter(merchant_name==merchant_name, end_date > datetime.now).first()
+    # budget = Budget.query.filter(merchant_name==merchant_name, end_date > datetime.now).first()
                     
-    #check if it exists in database to avoid repeating PK, if not add it
-    if not budget:
-        print(status, spend_limit, start_date, end_date, user, merchant_name)
+    # #check if it exists in database to avoid repeating PK, if not add it
+    # if not budget:
+    #     print(status, spend_limit, start_date, end_date, user, merchant_name)
 
-        budget = Budget(status=status,
-                        spend_limit=spend_limit, 
-                        start_date=start_date, 
-                        end_date=end_date, 
-                        user=user, 
-                        merchant_name=merchant_name)
+    budget = Budget(status=status,
+                    spend_limit=spend_limit, 
+                    start_date=start_date, 
+                    end_date=end_date, 
+                    user=user, 
+                    merchant_name=merchant_name)
 
-        print("created")
+    print("created")
 
-        db.session.add(budget)
+    db.session.add(budget)
 
-        print("added")
+    print("added")
 
-        db.session.commit()
+    db.session.commit()
 
-        return budget
+    return budget
 
 def create_account(account_id, available_balance, type, name, user):
     """Create and return a new account."""
@@ -86,21 +87,19 @@ def create_account(account_id, available_balance, type, name, user):
 
     return account
 
-def create_transaction(transaction_id, amount, date, merchant_name, user, account_id, category_id):
+def create_transaction(amount, date, merchant_name, user, account_id):
     """Create and return a new transaction."""
 
-    transaction = Transaction(transaction_id=transaction_id,
-                                amount=amount,
+    transaction = Transaction( amount=amount,
                                 date=date,
                                 merchant_name=merchant_name,  
                                 user=user, 
-                                account_id=account_id,
-                                category_id=category_id)
+                                account_id=account_id)
 
     db.session.add(transaction)
     db.session.commit()
 
-    return transaction
+    return transaction   
 
 # CRUD functions for sessions and web app flow
 def get_user_by_email(email):
@@ -141,19 +140,19 @@ def get_budget_status_by_budget_id(budget_id):
     
     budget = Budget.query.filter(Budget.budget_id == budget_id).first()
     transactions= Transaction.query.all()
-    print(transactions) #working 
+    # print(transactions) #working 
 
     if budget.end_date > datetime.now():
-        print (budget.end_date) #working 
+       # print (budget.end_date) #working 
 
         for transaction in transactions:
             #print (transaction.merchant_name) #working
 
             if (transaction.merchant_name == budget.merchant_name) and (transaction.date > budget.start_date) and (transaction.date < budget.end_date):
 
-                if sum(D(transaction.amount)) > budget.spend_limit:
+                if transaction.amount > budget.spend_limit: #messed up here, use pdb: helpful for many variables
                     return  f'Uh oh! Your tree died! You spent over the ${budget.spend_limit} budget for {budget.merchant_name}.'
-                elif sum(D(transaction.amount)) < budget.spend_limit or sum(D(transaction.amount)) == budget.spend_limit: 
+                elif transaction.amount < budget.spend_limit or transaction.amount == budget.spend_limit: 
                     return f"Your tree is still alive! You've been spending less than ${budget.spend_limit} at {budget.merchant_name} since {budget.start_date}"
 
             elif (transaction.merchant_name == budget.merchant_name):
