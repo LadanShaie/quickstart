@@ -161,14 +161,14 @@ def get_budget_status_by_budget_id(budget_id):
 
             if (transaction.merchant_name == budget.merchant_name) and (transaction.date >= budget.start_date) and (transaction.date <= budget.end_date):
                 sum_transactions += transaction.amount
-                print (sum_transactions) #Issue: not getting sum of all transactions that fit criteria only getting one 
+        print (sum_transactions) #Issue: not getting sum of all transactions that fit criteria only getting one 
             
-                if sum_transactions > budget.spend_limit: #messed up here, use pdb: helpful for many variables
-                    return  f'Uh oh! Your tree died! You went over budget and spent more than ${budget.spend_limit} at {budget.merchant_name}.'
-                elif (sum_transactions < budget.spend_limit) or (sum_transactions == budget.spend_limit):
-                    return f"Your tree is still alive! You've been spending less than ${budget.spend_limit} at {budget.merchant_name} since {budget.start_date}"
+        if sum_transactions > budget.spend_limit: #messed up here, use pdb: helpful for many variables
+            return  f'Uh oh! Your tree died! You went over budget and spent more than ${budget.spend_limit} at {budget.merchant_name}.'
+        elif (sum_transactions < budget.spend_limit) or (sum_transactions == budget.spend_limit):
+            return f"Your tree is still alive! You've been spending less than ${budget.spend_limit} at {budget.merchant_name}."
   
-    return f"Your tree is alive and well! You haven't spent a dime at {budget.merchant_name}." 
+    # return f"Your tree is alive and well! You haven't spent a dime at {budget.merchant_name}." 
 
   
 
