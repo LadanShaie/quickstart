@@ -85,7 +85,7 @@ class Transaction (db.Model):
 
     __tablename__ = 'transactions'
      
-    transaction_id = db.Column(db.String, primary_key=True)
+    transaction_id = db.Column(db.Integer, autoincrement=True, primary_key=True) #autoincrement for now, once data is from bank remove autoincrement/make db.string and add transaction_id to seed_database.
     amount = db.Column(db.Float)  #amount needs to be float not int
     category_id = db.Column(db.Integer, db.ForeignKey('categories.category_id')) # Use to group by and determine budget 
     date = db.Column(db.DateTime)

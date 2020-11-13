@@ -70,22 +70,17 @@ for item in balances_data['accounts']:
 # Populate transaction table in budgetapp db + store transactions in list 
 transactions_in_db = []
 for item in transaction_data['transactions']:
-        transaction_id, amount, merchant_name, account_id, category_id = (item['transaction_id'],
-                                                    item['amount'],
-                                                    item['name'],
-                                                    item['account_id'],
-                                                    item['category_id'])
+        amount, merchant_name, account_id = (item['amount'],
+                                            item['name'],
+                                            item['account_id'])                                         
 
         date = datetime.strptime(item['date'], '%Y-%m-%d')
 
-        db_transaction = crud.create_transaction(transaction_id,
-                                                amount,
+        db_transaction = crud.create_transaction(amount,
                                                 date,
                                                 merchant_name,  
-
                                                 user, 
-                                                account_id,
-                                                category_id)
+                                                account_id)
 
         transactions_in_db.append(db_transaction)
 
