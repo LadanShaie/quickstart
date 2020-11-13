@@ -75,17 +75,20 @@ def create_budget(status, spend_limit, start_date, end_date, user, merchant_name
 
 def create_account(account_id, available_balance, type, name, user):
     """Create and return a new account."""
+    account = Account.query.filter_by(account_id=account_id).first()
+                    
+    #check if it exists in database to avoid repeating PK, if not add it
+    if not account:
+        account = Account(account_id=account_id,
+                        available_balance=available_balance, 
+                        type=type,
+                        name=name,
+                        user=user)
 
-    account = Account(account_id=account_id,
-                      available_balance=available_balance, 
-                      type=type,
-                      name=name,
-                      user=user)
+        db.session.add(account)
+        db.session.commit()
 
-    db.session.add(account)
-    db.session.commit()
-
-    return account
+        return account
 
 def create_transaction(amount, date, merchant_name, user, account_id):
     """Create and return a new transaction."""
@@ -108,17 +111,24 @@ def get_user_by_email(email):
     return User.query.filter(User.email == email).first()
 
 
-
 def get_user_by_user_id(user_id): 
     """Find user by user_id"""
 
     return User.query.get(user_id) 
 
-# def get_amount_by_merchant():
-#     Transaction.query.with_entities(func.sum(Transaction.amount)).filter(Transaction.amount > 0).order_by(Transaction.name).all()
-#     print (Transaction.name)
 
-# SQL version: SELECT name, SUM(amount) FROM transactions GROUP BY name;
+# update account balance in db after new transaction is added 
+def get_account_by_account_id (account_id, amount): 
+    """Find account by account_id and subtract new transaction amount from available balance"""
+    
+    account = Account.query.get(account_id) 
+
+    account.available_balance = (account.available_balance - int(amount))
+
+    db.session.commit()
+    
+    return account 
+
 
 def get_all_budgets():
     """Return all budgets."""
@@ -145,20 +155,27 @@ def get_budget_status_by_budget_id(budget_id):
     if budget.end_date > datetime.now():
        # print (budget.end_date) #working 
 
+        sum_transactions = 0
         for transaction in transactions:
             #print (transaction.merchant_name) #working
 
-            if (transaction.merchant_name == budget.merchant_name) and (transaction.date > budget.start_date) and (transaction.date < budget.end_date):
-
-                if transaction.amount > budget.spend_limit: #messed up here, use pdb: helpful for many variables
-                    return  f'Uh oh! Your tree died! You spent over the ${budget.spend_limit} budget for {budget.merchant_name}.'
-                elif transaction.amount < budget.spend_limit or transaction.amount == budget.spend_limit: 
+            if (transaction.merchant_name == budget.merchant_name) and (transaction.date >= budget.start_date) and (transaction.date <= budget.end_date):
+                sum_transactions += transaction.amount
+                print (sum_transactions) #Issue: not getting sum of all transactions that fit criteria only getting one 
+            
+                if sum_transactions > budget.spend_limit: #messed up here, use pdb: helpful for many variables
+                    return  f'Uh oh! Your tree died! You went over budget and spent more than ${budget.spend_limit} at {budget.merchant_name}.'
+                elif (sum_transactions < budget.spend_limit) or (sum_transactions == budget.spend_limit):
                     return f"Your tree is still alive! You've been spending less than ${budget.spend_limit} at {budget.merchant_name} since {budget.start_date}"
+  
+    return f"Your tree is alive and well! You haven't spent a dime at {budget.merchant_name}." 
 
-            elif (transaction.merchant_name == budget.merchant_name):
-                return f"Your tree is alive and well! You haven't spent a dime at {budget.merchant_name}."   
+  
 
-
+# def get_amount_by_merchant():
+#     Transaction.query.with_entities(func.sum(Transaction.amount)).filter(Transaction.amount > 0).order_by(Transaction.name).all()
+#     print (Transaction.name)
+# SQL version: SELECT name, SUM(amount) FROM transactions GROUP BY name;
 
 
 if __name__ == '__main__':

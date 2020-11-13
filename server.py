@@ -78,12 +78,59 @@ def login_info():
     if user:  
         if password == user.password: 
             session['user_id'] = user.user_id
-            return redirect('/budgets')
+            return redirect('/overview')
     
     flash('Incorrect email or password. Please try again.')
     return redirect('/login')
 
+########### app guide route ###############
+@app.route('/app_guide', methods=['GET'])
+def get_app_guide():
+    """View app guide page."""
 
+    return render_template('app_guide.html')
+
+
+########### add account page routes ###############
+@app.route('/add_account', methods=['GET'])
+def get_add_bank_account():
+    """View add bank account form."""
+
+    if session.get('user_id'):
+        return render_template('add_account.html')
+    else: 
+        flash('Please login to proceed to this page.')
+        return redirect('/login') 
+
+
+@app.route('/add_account', methods=['POST'])
+def save_added_bank_account():
+    """Add a bank account and send it to db, user can view it after being redirected back to the overview page."""    
+    
+    if session.get('user_id'):
+        submit_add_account_form = request.form.get("submit_add_account_form")
+
+        if  submit_add_account_form  == 'Submit': 
+            account_id = request.form.get("account_name")
+            name = request.form.get("account_name")
+            available_balance = request.form.get("available_balance")
+            type = "depository"
+            user = crud.get_user_by_user_id(session['user_id']) #gets user by session user_id
+
+            crud.create_account(account_id, available_balance, type, name, user)
+
+            flash('New bank account Has Been added!')
+            return redirect('/overview')
+            
+        else: 
+            flash('Sorry, something went wrong. Please try again.')
+            return redirect ('/add_account')  
+    else: 
+        flash('Please login to proceed to this page.')
+        return redirect('/login')
+
+
+########### Overview page routes ###############
 
 @app.route('/overview', methods=['GET'])
 def overview_data():
@@ -102,15 +149,17 @@ def redirect_to_budgets():
 
     view_budgets_page = request.form.get('budgets_page')
     view_add_transaction_page = request.form.get("add_transactions_page")
+    view_add_account_page = request.form.get("add_account_page")
 
     if  view_budgets_page == 'View My Budgets':
         return redirect('/budgets')
-    if  view_add_transaction_page == 'Add a new transaction':
-        return redirect('/add_transaction')    
+    if  view_add_transaction_page == 'Add New Transaction':
+        return redirect('/add_transaction')
+    if  view_add_account_page == 'Add New Bank Account':
+        return redirect('/add_account')
 
 
-
-
+########### Budgets page routes ###############
 
 @app.route('/budgets', methods=['GET'])
 def get_budgets():
@@ -134,7 +183,7 @@ def redirect_to_create_budget():
         return redirect('/create_budget')     
 
 
-
+########### Create Budget page routes ###############
 
 @app.route('/create_budget', methods=['GET'])
 def get_create_budget():
@@ -181,17 +230,17 @@ def view_each_budget(budget_id):
     """View a budget status page"""
 
     if session.get('user_id'):
-        # user = crud.get_user_by_user_id(session['user_id'])
-        # print (current_date)
-        # current_date= "2020-11-12 0:0:0.0"
         budget_status=crud.get_budget_status_by_budget_id(budget_id)
-        # print (budget_status)
+
         return render_template('budget_status.html', budget_status=budget_status)
 
-        # return render_template('budget_status.html', budget=budget, current_date=current_date, transactions=user.transactions)
     else: 
         flash('Please login to proceed to this page.')
         return redirect('/login')        
+
+
+
+########### Add Transaction page routes ###############
 
 @app.route('/add_transaction', methods=['GET'])
 def get_add_transaction():
@@ -214,14 +263,18 @@ def save_added_transaction():
 
         if  submit_add_transaction_form  == 'Submit': 
             account_id = request.form.get("selected_account")
-            merchant_name = request.form.get('merchant_name') #Issue, if new merchant_name add this to merchant table in db
+            merchant_name = request.form.get('merchant_name')
             amount = request.form.get('amount')
             date = request.form.get('transaction_date') 
-            #gets user by session user_id
-            user = crud.get_user_by_user_id(session['user_id'])
+            user = crud.get_user_by_user_id(session['user_id'])  #gets user by session user_id
 
-            crud.create_transaction(amount, date, merchant_name, user, account_id)
+            # If new merchant_name, add the new merchant_name to merchant table 
             crud.create_merchant_name(merchant_name, user)
+            # The we can created a transaction using a new merchant_name.
+            crud.create_transaction(amount, date, merchant_name, user, account_id)
+            # After transaction is added, now we can update associated account balance through acccount_id
+            crud.get_account_by_account_id (account_id, amount) 
+
             flash('New transaction Has Been added!')
             return redirect('/overview')
             
