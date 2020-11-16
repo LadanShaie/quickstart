@@ -50,28 +50,28 @@ def create_merchant_name(merchant_name, user):
 
 def create_budget(status, spend_limit, start_date, end_date, user, merchant_name): # tried merchant_name got instance error
     """Create and return a new budget."""
-    # budget = Budget.query.filter(merchant_name==merchant_name, end_date > datetime.now).first()
+    budget = Budget.query.filter(merchant_name==merchant_name, end_date > datetime.now()).first()
                     
-    # #check if it exists in database to avoid repeating PK, if not add it
-    # if not budget:
-    #     print(status, spend_limit, start_date, end_date, user, merchant_name)
+    #check if it exists in database to avoid repeating PK, if not add it
+    if not budget:
+        print(status, spend_limit, start_date, end_date, user, merchant_name)
 
-    budget = Budget(status=status,
-                    spend_limit=spend_limit, 
-                    start_date=start_date, 
-                    end_date=end_date, 
-                    user=user, 
-                    merchant_name=merchant_name)
+        budget = Budget(status=status,
+                        spend_limit=spend_limit, 
+                        start_date=start_date, 
+                        end_date=end_date, 
+                        user=user, 
+                        merchant_name=merchant_name)
 
-    print("created")
+        print("created")
 
-    db.session.add(budget)
+        db.session.add(budget)
 
-    print("added")
+        print("added")
 
-    db.session.commit()
+        db.session.commit()
 
-    return budget
+        return budget
 
 def create_account(account_id, available_balance, type, name, user):
     """Create and return a new account."""
@@ -164,9 +164,9 @@ def get_budget_status_by_budget_id(budget_id):
         print (sum_transactions) #Issue: not getting sum of all transactions that fit criteria only getting one 
             
         if sum_transactions > budget.spend_limit: #messed up here, use pdb: helpful for many variables
-            return  f'Uh oh! Your tree died! You went over budget and spent more than ${budget.spend_limit} at {budget.merchant_name}.'
+            return  f"Uh oh! Your tree died! You spent ${sum_transactions} instead of ${budget.spend_limit} at {budget.merchant_name}."
         elif (sum_transactions < budget.spend_limit) or (sum_transactions == budget.spend_limit):
-            return f"Your tree is still alive! You've been spending less than ${budget.spend_limit} at {budget.merchant_name}."
+            return f"Your tree is still alive! You've only spent {sum_transactions} of your ${budget.spend_limit} for {budget.merchant_name}."
   
     # return f"Your tree is alive and well! You haven't spent a dime at {budget.merchant_name}." 
 
