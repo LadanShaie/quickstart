@@ -37,14 +37,14 @@ def from_homepage():
     elif login_choice == 'Login':
         return redirect('/login')
 
+########### Create an account routes ###############
 
-
-@app.route('/create_account')
+@app.route('/create_account', methods=['GET']) 
 def create_account():
     """View create account page."""
     return render_template('create_account.html')
 
-@app.route('/create_accout', methods=['POST'])
+@app.route('/create_account', methods=['POST'])
 def create_account_info():
     """Create a new account + Store user info in db"""
     user_name = request.form.get('user_name')
@@ -54,13 +54,15 @@ def create_account_info():
     user = crud.get_user_by_email(email)
     if user:
         flash('Cannot create an account with that email. Try again.')
+        return redirect('/create_account')
     else:
         added_user = crud.create_user(user_name, email, password)
         session['user_id'] = added_user.user_id
         flash('Account created! Please log in.')
+        return redirect('/login')
 
-    return redirect('/login')
 
+########### Login routes ###############
 
 @app.route('/login', methods=['GET'])
 def login():
@@ -285,6 +287,17 @@ def save_added_transaction():
         flash('Please login to proceed to this page.')
         return redirect('/login')
 
+# /logout
+# delete session
+# create test
+# redirect to hompage 
+
+@app.route("/logout")
+def logout():
+    """Delete session after user logout """
+
+    session['user_id'] = None
+    return render_template('homepage.html')
 
 
 if __name__ == '__main__':
