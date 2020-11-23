@@ -9,14 +9,14 @@
     <!-- Load Bootstrap 4 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- Load jquery -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script  src="https://code.jquery.com/jquery-3.5.1.js"  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="  crossorigin="anonymous"></script>
     <!-- Load our stylesheet -->
     <link rel="stylesheet" href="/static/style.css">
     {% block head %}{% endblock %}
   </head>
   <body>
-    <!-- Static navbar -->
-    {% if session['user_id'] != None %}  
+    <!-- Logged in navbar -->
+    {% if session['user_id'] != None %} 
     <nav class="navbar navbar-expand-lg navbar-dark">
       
         <a id="budget-therapy-logo" class="navbar-brand" href="/overview">Budget Therapy</a>
@@ -46,14 +46,15 @@
         </ul>
         </div>
     </nav>
-    {% else %}
+    {% else %} 
+    <!-- logged out navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       
       <a id="budget-therapy-logo" class="navbar-brand" href="/overview">Budget Therapy</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
       </button>
-    </nav>
+    </nav> 
     {% endif %}
 
     {% for msg in get_flashed_messages() %}

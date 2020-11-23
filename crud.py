@@ -178,7 +178,7 @@ def get_budget_status_by_budget_id(budget_id):
     if sum_transactions > budget.spend_limit:
         budget.status = "Tree is Dead"
         db.session.commit() #db session commit here after making budget.status = return statement
-        return  f"Uh oh! Your tree died! You spent ${sum_transactions} instead of ${budget.spend_limit} at {budget.merchant_name}."
+        return  f"Your tree died! You spent ${sum_transactions} instead of ${budget.spend_limit} at {budget.merchant_name}."
         
     elif (sum_transactions < budget.spend_limit) or (sum_transactions == budget.spend_limit):
         budget.status = "Tree is Alive"

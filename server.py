@@ -177,7 +177,7 @@ def get_budgets():
         date_now = datetime.now() 
         count_alive = crud.get_garden_alive_count()
         count_dead = crud.get_garden_dead_count()
-        
+
         return render_template('budgets.html', user_name=user.user_name, budgets= user.budgets, date_now=date_now, count_alive=count_alive, count_dead=count_dead)
     else: 
         flash('Please login to proceed to this page.')
@@ -234,6 +234,7 @@ def save_created_budget():
         flash('Please login to proceed to this page.')
         return redirect('/login')
 
+########### Unique budget route ###############
 
 @app.route('/budgets/<budget_id>', methods=['GET'])
 def view_each_budget(budget_id):
@@ -242,7 +243,7 @@ def view_each_budget(budget_id):
     if session.get('user_id'):
         budget_status=crud.get_budget_status_by_budget_id(budget_id)
 
-        return render_template('budget_status.html', budget_status=budget_status)
+        return budget_status
 
     else: 
         flash('Please login to proceed to this page.')
