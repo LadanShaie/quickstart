@@ -15,8 +15,8 @@
    
         <div class="content-center">
             {% for account in accounts %}
-                {% if account.type == "depository" %}
-                <h5>{{account.name}}   ${{account.available_balance}}</h5>
+                {% if account.type == "depository" and account.available_balance != None %}
+                <h5>{{account.name}}........${{account.available_balance}}</h5>
                 {% endif %}  
             {% endfor %}
             <!-- <div class="text-left"> -->
@@ -54,6 +54,7 @@
                     <td> {{t.merchant_name}} </td>
                     <td> {{t.amount}} </td>
                     <td>  {{t.date}} </td>
+                    <td> <input type="submit" class="submit-btn" name= "delete-transaction" value="Delete"></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -68,7 +69,7 @@
 </div>    
 
 <script>
-
+// JQuery search 
 $(document).ready(function(){
   $("#input").on("keyup", function() {
     var value = $(this).val().toLowerCase();
@@ -78,6 +79,7 @@ $(document).ready(function(){
   });
 });
 
+// Reordering transactions history table by date
 $("tbody").each(function() { 
     var list = $(this).children('tr');
     $(this).html(list.get().reverse())

@@ -152,6 +152,7 @@ def redirect_to_budgets():
     view_budgets_page = request.form.get('budgets_page')
     view_add_transaction_page = request.form.get("add_transactions_page")
     view_add_account_page = request.form.get("add_account_page")
+    delete_transaction= request.form.get("delete_transaction")
 
     if  view_budgets_page == 'View My Budgets':
         return redirect('/budgets')
@@ -159,18 +160,23 @@ def redirect_to_budgets():
         return redirect('/add_transaction')
     if  view_add_account_page == 'Add New Bank Account':
         return redirect('/add_account')
+    # if  delete_transaction == 'Delete':
+        # delete = crud.delete_transaction(transaction_id) #how to link transaction_id if its autoincremented?
+        # flash('Transaction deleted!')
+        # return redirect('/overview')
+
 
 
 ########### Budgets page routes ###############
-
 @app.route('/budgets', methods=['GET'])
 def get_budgets():
     """View budgets page."""
 
     if session.get('user_id'):
         user = crud.get_user_by_user_id(session['user_id'])
+        date_now = datetime.now() #.strftime('%Y%m%d')
         #flash('You made it!') #Test flash since not working, printing directly on screen, I want pop up 
-        return render_template('budgets.html', user_name=user.user_name, budgets= user.budgets)
+        return render_template('budgets.html', user_name=user.user_name, budgets= user.budgets, date_now=date_now)
     else: 
         flash('Please login to proceed to this page.')
         return redirect('/login')  
@@ -250,7 +256,7 @@ def get_add_transaction():
 
     if session.get('user_id'):
         user = crud.get_user_by_user_id(session['user_id'])
-        return render_template('add_transactions.html', accounts=user.accounts)
+        return render_template('add_transactions.html', accounts=user.accounts, merchants=user.merchants)
     else: 
         flash('Please login to proceed to this page.')
         return redirect('/login') 

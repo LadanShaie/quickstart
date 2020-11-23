@@ -6,6 +6,18 @@
 <div class="row justify-content-center">
     <label class="Table_title"><h2>{{user_name}}'s Budget</h2></label>
 </div>
+        <!-- <div>
+            <h3>Garden</h3>
+            for budgets in budgets 
+            if date_now > budget.end_date and budget.status 
+                count += 1
+
+        </div> -->
+        <br>
+        <div>
+            <h3>Active Budgets</h3>
+        </div>
+        <br>
         <table class="table table-hover">
             <thead>
             <tr>
@@ -13,22 +25,50 @@
                 <th scope="col">Amount</th>
                 <th scope="col">Start Date</th>
                 <th scope="col">End Date</th>
-                <th scope="col">Status</th>
+                <th scope="col" id="Status">Status</th>
             </tr>
             </thead>
-            <tbody id="get-transactions-data">
+            <tbody id="get-budgets-data">
             {% for budget in budgets %}
-                <!-- {% if budget.budget_id >= 1 %} -->
+                {% if budget.end_date >= date_now %}
                     <tr>
                     <td> {{budget.merchant_name}} </td>
                     <td> {{budget.spend_limit}} </td>
                     <td>  {{budget.start_date}} </td>
                     <td>  {{budget.end_date}} </td>
-                    <td> <a href="/budgets/{{ budget.budget_id }}"> View Status  </a> </td>
+                    <td headers="Status"> <a href="/budgets/{{ budget.budget_id }}"> View Status  </a> </td>
                     </tr>
-                <!-- {% else %} doesn't work, ask for help later after api connected -->
-                    <!-- <h3>You Currently Have No Active Budgets, Click Create A Budget To Get Started!</h3>     -->
-                <!-- {% endif %}     -->
+                
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table> 
+        <br>
+        <div>
+            <h3>Past Budgets</h3>
+        </div>
+        <br>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col" id="Status">Status</th>
+            </tr>
+            </thead>
+            <tbody id="get-budgets-data">
+            {% for budget in budgets %}
+                {% if date_now > budget.end_date %} 
+                    <tr>
+                    <td> {{budget.merchant_name}} </td>
+                    <td> {{budget.spend_limit}} </td>
+                    <td>  {{budget.start_date}} </td>
+                    <td>  {{budget.end_date}} </td>
+                    <td headers="Status"> <a href="/budgets/{{ budget.budget_id }}"> View Status  </a> </td>
+                    </tr>
+                {% endif %} 
             {% endfor %}
             </tbody>
         </table> 
@@ -40,8 +80,20 @@
     </form> 
 </div>
 
+<!-- <script>
+$(function(){
+    $("#Status").click(function() {
+        $.ajax({
+        url : '/budgets',
+        data:{id: $(this).attr('id')},
+        type: 'GET',
+        success: function(data){
+            $('#Status-response').html(data);
+            }
+        });
+    });
+});
 
+</script> -->
 
 {% endblock %}
-
-<!-- redirects to this page after user log in + link bank index html plaid. no exsisting budgets (include link redirect to create_budget.html). otherwise, list exsisting active budgets and their status include buttonlink on left side of each budget row to see status then render either green or red html template. (add status in budget table to model.py).in future, if no exsisting budget say 'no active budget' AND include button to see past/inactive ones by loop through budget table in db  -->

@@ -50,28 +50,28 @@ def create_merchant_name(merchant_name, user):
 
 def create_budget(status, spend_limit, start_date, end_date, user, merchant_name): # tried merchant_name got instance error
     """Create and return a new budget."""
-    budget = Budget.query.filter(merchant_name==merchant_name, end_date > datetime.now()).first()
+    # budget = Budget.query.filter(merchant_name==merchant_name, end_date > datetime.now()).first()
                     
-    #check if it exists in database to avoid repeating PK, if not add it
-    if not budget:
-        print(status, spend_limit, start_date, end_date, user, merchant_name)
+    # #check if it exists in database to avoid repeating PK, if not add it
+    # if not budget:
+    #     print(status, spend_limit, start_date, end_date, user, merchant_name)
 
-        budget = Budget(status=status,
-                        spend_limit=spend_limit, 
-                        start_date=start_date, 
-                        end_date=end_date, 
-                        user=user, 
-                        merchant_name=merchant_name)
+    budget = Budget(status=status,
+                    spend_limit=spend_limit, 
+                    start_date=start_date, 
+                    end_date=end_date, 
+                    user=user, 
+                    merchant_name=merchant_name)
 
-        print("created")
+    print("created")
 
-        db.session.add(budget)
+    db.session.add(budget)
 
-        print("added")
+    print("added")
 
-        db.session.commit()
+    db.session.commit()
 
-        return budget
+    return budget
 
 def create_account(account_id, available_balance, type, name, user):
     """Create and return a new account."""
@@ -123,11 +123,25 @@ def get_account_by_account_id (account_id, amount):
     
     account = Account.query.get(account_id) 
 
-    account.available_balance = (account.available_balance - int(amount))
+    account.available_balance = (account.available_balance + int(amount))
 
     db.session.commit()
     
     return account 
+
+### Delete items ######
+def delete_transaction (transaction_id):
+
+    transaction = Transaction.query.filter_by(transaction_id=transaction_id).one()
+    db.session.delete(transaction)
+    db.session.commit()
+
+
+# def delete_budget (budget_id):
+
+#     budget = Budget.query.filter_by(budget_id=budget_id).one()
+#     db.session.delete(budget)
+#     db.session.commit()
 
 
 def get_all_budgets():
@@ -145,30 +159,31 @@ def get_budget_by_budget_id(budget_id):
 
     return Budget.query.get(1)
 
-# budget status function
+# Get budget status function
 def get_budget_status_by_budget_id(budget_id):
     
     budget = Budget.query.filter(Budget.budget_id == budget_id).first()
     transactions= Transaction.query.all()
-    # print(transactions) #working 
 
-    if budget.end_date > datetime.now():
-       # print (budget.end_date) #working 
 
-        sum_transactions = 0
-        for transaction in transactions:
-            #print (transaction.merchant_name) #working
 
-            if (transaction.merchant_name == budget.merchant_name) and (transaction.date >= budget.start_date) and (transaction.date <= budget.end_date):
-                sum_transactions += transaction.amount
-        print (sum_transactions) #Issue: not getting sum of all transactions that fit criteria only getting one 
-            
-        if sum_transactions > budget.spend_limit: #messed up here, use pdb: helpful for many variables
-            return  f"Uh oh! Your tree died! You spent ${sum_transactions} instead of ${budget.spend_limit} at {budget.merchant_name}."
-        elif (sum_transactions < budget.spend_limit) or (sum_transactions == budget.spend_limit):
-            return f"Your tree is still alive! You've only spent {sum_transactions} of your ${budget.spend_limit} for {budget.merchant_name}."
-  
-    # return f"Your tree is alive and well! You haven't spent a dime at {budget.merchant_name}." 
+    sum_transactions = 0
+    for transaction in transactions:
+
+        if (transaction.merchant_name == budget.merchant_name) and (transaction.date >= budget.start_date) and (transaction.date <= budget.end_date):
+            sum_transactions += transaction.amount
+            sum_transactions = abs(sum_transactions)
+    print (sum_transactions) #Issue: not getting sum of all transactions that fit criteria only getting one 
+        
+    if sum_transactions > budget.spend_limit:
+        budget.status = f"Uh oh! Your tree died! You spent ${sum_transactions} instead of ${budget.spend_limit} at {budget.merchant_name}."
+        db.session.commit() #db session commit here after making budget.status = return statement
+        return  f"Uh oh! Your tree died! You spent ${sum_transactions} instead of ${budget.spend_limit} at {budget.merchant_name}."
+    elif (sum_transactions < budget.spend_limit) or (sum_transactions == budget.spend_limit):
+        budget.status = f"Your tree is still alive! You've spent ${sum_transactions} of the allocated ${budget.spend_limit} budget for {budget.merchant_name}."
+        db.session.commit() #db session commit here after making budget.status = return statement
+        return f"Your tree is alive! You've spent ${sum_transactions} of the allocated ${budget.spend_limit} budget for {budget.merchant_name}."
+
 
   
 
