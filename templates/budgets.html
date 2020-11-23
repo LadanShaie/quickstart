@@ -3,16 +3,33 @@
 
 {% block body %}
 
-<div class="row justify-content-center">
-    <label class="Table_title"><h2>{{user_name}}'s Budget</h2></label>
-</div>
-        <!-- <div>
-            <h3>Garden</h3>
-            for budgets in budgets 
-            if date_now > budget.end_date and budget.status 
-                count += 1
-
+        <div class= "text-center">
+            <h2>My Garden</h2>
+           
+            <div class="col-lg-4 offset-lg-4">
+                <table class="table table">
+                    <thead>
+                    <tr>
+                        <th scope="col"class="bg-success"><h4> Living Trees </h4></th>
+                        <th scope="col"class="bg-warning"><h4> Dead Trees </h4></th>
+                    </tr>
+                    </thead>
+                    <tbody id="garden">
+                            <tr>
+                            <td class="table-success"> <h3>{{ count_alive }}</h3> </td>
+                            <td class="table-warning"> <h3>{{ count_dead }}</h3> </td>
+                            </tr>
+                    </tbody>
+                </table>  
+            </div>     
+        </div>     
+        <br>
+        <!-- Might not need after all  -->
+        <!-- <div class="row justify-content-center">
+            <label class="Table_title"><h2>{{user_name}}'s Budget</h2></label>
         </div> -->
+
+
         <br>
         <div>
             <h3>Active Budgets</h3>
@@ -25,7 +42,7 @@
                 <th scope="col">Amount</th>
                 <th scope="col">Start Date</th>
                 <th scope="col">End Date</th>
-                <th scope="col" id="Status">Status</th>
+                <th scope="col">Status</th>
             </tr>
             </thead>
             <tbody id="get-budgets-data">
@@ -36,7 +53,8 @@
                     <td> {{budget.spend_limit}} </td>
                     <td>  {{budget.start_date}} </td>
                     <td>  {{budget.end_date}} </td>
-                    <td headers="Status"> <a href="/budgets/{{ budget.budget_id }}"> View Status  </a> </td>
+                    <td> <a href="/budgets/{{ budget.budget_id }}"> View Status  </a> </td>
+                    <!-- headers="Status"after td -->
                     </tr>
                 
                 {% endif %}

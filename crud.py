@@ -161,7 +161,7 @@ def get_budget_by_budget_id(budget_id):
 
 # Get budget status function
 def get_budget_status_by_budget_id(budget_id):
-    
+    """Return budget status by budget_id."""
     budget = Budget.query.filter(Budget.budget_id == budget_id).first()
     transactions= Transaction.query.all()
 
@@ -173,24 +173,46 @@ def get_budget_status_by_budget_id(budget_id):
         if (transaction.merchant_name == budget.merchant_name) and (transaction.date >= budget.start_date) and (transaction.date <= budget.end_date):
             sum_transactions += transaction.amount
             sum_transactions = abs(sum_transactions)
-    print (sum_transactions) #Issue: not getting sum of all transactions that fit criteria only getting one 
+    print (sum_transactions) #For testing  
         
     if sum_transactions > budget.spend_limit:
-        budget.status = f"Uh oh! Your tree died! You spent ${sum_transactions} instead of ${budget.spend_limit} at {budget.merchant_name}."
+        budget.status = "Tree is Dead"
         db.session.commit() #db session commit here after making budget.status = return statement
         return  f"Uh oh! Your tree died! You spent ${sum_transactions} instead of ${budget.spend_limit} at {budget.merchant_name}."
+        
     elif (sum_transactions < budget.spend_limit) or (sum_transactions == budget.spend_limit):
-        budget.status = f"Your tree is still alive! You've spent ${sum_transactions} of the allocated ${budget.spend_limit} budget for {budget.merchant_name}."
+        budget.status = "Tree is Alive"
         db.session.commit() #db session commit here after making budget.status = return statement
         return f"Your tree is alive! You've spent ${sum_transactions} of the allocated ${budget.spend_limit} budget for {budget.merchant_name}."
 
 
-  
 
-# def get_amount_by_merchant():
-#     Transaction.query.with_entities(func.sum(Transaction.amount)).filter(Transaction.amount > 0).order_by(Transaction.name).all()
-#     print (Transaction.name)
-# SQL version: SELECT name, SUM(amount) FROM transactions GROUP BY name;
+def get_garden_alive_count():
+    """Return garden alive trees count."""
+
+    budgets = Budget.query.all()
+
+    count_alive = 0
+    for budget in budgets:
+
+        if (datetime.now() > budget.end_date) and (budget.status == "Tree is Alive"):
+            count_alive += 1
+
+    return count_alive 
+
+def get_garden_dead_count():
+    """Return garden dead trees count."""
+
+    budgets = Budget.query.all()
+    count_dead = 0
+
+    for budget in budgets:
+
+        if (datetime.now() > budget.end_date) and (budget.status == "Tree is Dead"):    
+            count_dead += 1
+
+    return count_dead 
+
 
 
 if __name__ == '__main__':
