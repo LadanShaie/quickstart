@@ -1,7 +1,6 @@
 import base64
 import os
-from datetime import datetime
-import plaid
+from datetime import datetime, date
 import json
 import time
 from model import connect_to_db
@@ -153,6 +152,7 @@ def redirect_to_budgets():
     view_add_transaction_page = request.form.get("add_transactions_page")
     view_add_account_page = request.form.get("add_account_page")
     delete_transaction= request.form.get("delete_transaction")
+    
 
     if  view_budgets_page == 'View My Budgets':
         return redirect('/budgets')
@@ -160,10 +160,10 @@ def redirect_to_budgets():
         return redirect('/add_transaction')
     if  view_add_account_page == 'Add New Bank Account':
         return redirect('/add_account')
-    # if  delete_transaction == 'Delete':
-        # delete = crud.delete_transaction(transaction_id) #how to link transaction_id if its autoincremented?
-        # flash('Transaction deleted!')
-        # return redirect('/overview')
+    if  delete_transaction == 41:
+        crud.delete_transaction(41) #how to link transaction_id if its autoincremented?
+        flash('Transaction deleted!')
+        return redirect('/overview')
 
 
 
@@ -219,17 +219,19 @@ def save_created_budget():
             start_date = request.form.get('start_date') 
             end_date = request.form.get('end_date')
             status= "active for storage" 
-
+            print (end_date)
+            print (date.today())
             #gets user by session user_id
             user = crud.get_user_by_user_id(session['user_id'])
 
-            new_budget = crud.create_budget(status, spend_limit, start_date, end_date, user, merchant_name)
-            flash('New Budget Has Been Created!')
-            return redirect(f'/budgets/{new_budget.budget_id}')
+            budget_response = crud.create_budget(status, spend_limit, start_date, end_date, user, merchant_name)
+            if budget_response == "budget-created":
+                flash('New Budget Has Been Created!')
+                return redirect('/budgets')
             
-        else: 
-            flash('An active budget already exsits for this merchant, you can view it in the budget tab')
-            return redirect ('/create_budget')  
+            elif budget_response == "budget-exsists":
+                flash("An active budget already exsits for this merchant, you can view it below in the active budgets' table!")
+                return redirect ('/budgets')  
     else: 
         flash('Please login to proceed to this page.')
         return redirect('/login')
@@ -242,7 +244,6 @@ def view_each_budget(budget_id):
 
     if session.get('user_id'):
         budget_status=crud.get_budget_status_by_budget_id(budget_id)
-
         return budget_status
 
     else: 

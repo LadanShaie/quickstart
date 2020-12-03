@@ -45,9 +45,9 @@
                 {% if budget.end_date >= date_now %}
                     <tr>
                     <td> {{budget.merchant_name}} </td>
-                    <td> {{budget.spend_limit}} </td>
-                    <td>  {{budget.start_date}} </td>
-                    <td>  {{budget.end_date}} </td>
+                    <td> ${{budget.spend_limit}} </td>
+                    <td>  {{budget.start_date.strftime('%d-%m-%Y')}} </td>
+                    <td>  {{budget.end_date.strftime('%d-%m-%Y')}} </td>
                     <td class= "see_status" id= "{{ budget.budget_id }}">  View Status  </td>
                     </tr>
                 
@@ -75,9 +75,9 @@
                 {% if date_now > budget.end_date %} 
                     <tr>
                     <td> {{budget.merchant_name}} </td>
-                    <td> {{budget.spend_limit}} </td>
-                    <td>  {{budget.start_date}} </td>
-                    <td>  {{budget.end_date}} </td>
+                    <td> ${{budget.spend_limit}} </td>
+                    <td>  {{budget.start_date.strftime('%d-%m-%Y')}} </td>
+                    <td>  {{budget.end_date.strftime('%d-%m-%Y')}} </td>
                     <td class= "see_status" id= "{{ budget.budget_id }}" > View Status </td>
                     </tr>
                 {% endif %} 

@@ -1,7 +1,7 @@
 """CRUD operations."""
 
 from model import db, User, Category, Merchant, Account, Budget, Transaction, connect_to_db
-from datetime import datetime
+from datetime import datetime, date
 from decimal import Decimal as D
 
 
@@ -50,28 +50,34 @@ def create_merchant_name(merchant_name, user):
 
 def create_budget(status, spend_limit, start_date, end_date, user, merchant_name): # tried merchant_name got instance error
     """Create and return a new budget."""
-    # budget = Budget.query.filter(merchant_name==merchant_name, end_date > datetime.now()).first()
-                    
-    # #check if it exists in database to avoid repeating PK, if not add it
-    # if not budget:
-    #     print(status, spend_limit, start_date, end_date, user, merchant_name)
+  
+    budget = Budget.query.filter(merchant_name==merchant_name, Budget.end_date >= datetime.now()).all()
+    
+    # print (budget) for testing 
+    
+    #check if it exists in database to avoid repeating PK, if not add it
+    if not budget:
+        # print(status, spend_limit, start_date, end_date, user, merchant_name)
 
-    budget = Budget(status=status,
-                    spend_limit=spend_limit, 
-                    start_date=start_date, 
-                    end_date=end_date, 
-                    user=user, 
-                    merchant_name=merchant_name)
+        budget = Budget(status=status,
+                        spend_limit=spend_limit, 
+                        start_date=start_date, 
+                        end_date=end_date, 
+                        user=user, 
+                        merchant_name=merchant_name)
 
-    print("created")
+        print("created")
 
-    db.session.add(budget)
+        db.session.add(budget)
 
-    print("added")
+        print("added")
 
-    db.session.commit()
+        db.session.commit()
 
-    return budget
+        return "budget-created"
+    else: 
+        return "budget-exsists"
+    
 
 def create_account(account_id, available_balance, type, name, user):
     """Create and return a new account."""
@@ -132,10 +138,11 @@ def get_account_by_account_id (account_id, amount):
 ### Delete items ######
 def delete_transaction (transaction_id):
 
-    transaction = Transaction.query.filter_by(transaction_id=transaction_id).one()
+    transaction = Transaction.query.filter_by(transaction_id=transaction_id).first()
     db.session.delete(transaction)
+    print ("Transaction Deleted")
     db.session.commit()
-
+    return transaction_id
 
 # def delete_budget (budget_id):
 
@@ -173,7 +180,9 @@ def get_budget_status_by_budget_id(budget_id):
         if (transaction.merchant_name == budget.merchant_name) and (transaction.date >= budget.start_date) and (transaction.date <= budget.end_date):
             sum_transactions += transaction.amount
             sum_transactions = abs(sum_transactions)
-    print (sum_transactions) #For testing  
+            #print (sum_transactions) #For testing  
+        print(budget.end_date)
+        
         
     if sum_transactions > budget.spend_limit:
         budget.status = "Tree is Dead"

@@ -53,8 +53,12 @@
                     <tr>
                     <td> {{t.merchant_name}} </td>
                     <td> {{t.amount}} </td>
-                    <td>  {{t.date}} </td>
-                    <td> <input type="submit" class="submit-btn" name= "delete-transaction" value="Delete"></td>
+                    <td>  {{t.date.strftime('%d-%m-%Y')}} </td>
+                    <td>
+                        <form action="/overview" method='POST' >
+                            <input type="submit" class="submit-btn" name= "delete-transaction" id = {{t.transaction_id}} value="{{t.transaction_id}}">
+                        </form>
+                        </td> 
                     </tr>
                 {% endfor %}
                 </tbody>
