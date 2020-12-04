@@ -2,22 +2,43 @@
 {% block title %}Creat Account Page{% endblock %}
 
 {% block body %}
-<h1>Create an Account</h1>
-  <form action="/create_account" method="POST">
-    <p>
-      User Name <input type="text" name="user_name">
-    </p>
+<style>
+  body {
+    background: url(/static/img/tree.jpeg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;  
+  }
+</style>
+<div class= "text-left" >
+  <div class="jumbotron col-lg-6 col-md-6 col-sm-6 col-xs-6 offset-0 float-md-center">
+    <h1 class="display-3">Create Account</h1>
+    <br>   
+    <div class = "text-left ">
+        <form action="/create_account" method="POST">
+          <div class="form-group">
+            <label><h5>User Name </h5> </label>
+            <input type="text" class="form-control mx-sm-1" name="user_name" placeholder="Enter username">
+          </div>
 
-    <p>
-      Email <input type="text" name="email">
-    </p>
+          <div class="form-group">
+            <label><h5>Email address </h5> </label>
+            <input type="text" class="form-control mx-sm-1" name="email" placeholder="Enter email">
+          </div>
 
-    <p>
-      Password <input type="text" name="password">
-    </p>
+          <div class="form-group">
+            <label> <h5> Password </h5> </label>
+            <input type="text" class="form-control mx-sm-1" name="password" placeholder="Enter password">
+          </div>
+          <br>     
+          <div class="form-group">
+            <button type="submit" class="btn btn-success btn-lg">Sign up</button>
+          </div>
+        </form>
+      </div>
+  </div>
+  </div>
+</div>
 
-    <p>
-      <input type="submit">
-    </p>
-  </form>
 {% endblock %}

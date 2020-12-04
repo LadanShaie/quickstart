@@ -18,9 +18,47 @@ Base
 	color: white;
 }
 
-body {
-  background:#F5FFFA;
+#container-fluid {
+	background-image: url(/static/img/tree.jpeg) no-repeat center center;
+	background-size: cover;  
+	height: 10px
 }
+
+body {
+
+	background:#F5FFFA;
+}
+
+#homepage-img {
+	background: url(/static/img/tree.jpeg) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;  
+}
+
+
+.jumbotron { 
+	margin-top: 40px; 
+	background-color: transparent;
+	opacity: 0.85;
+}
+
+.display-3 {
+	color: #f5e7ce
+}
+
+.form-group {
+	color: white
+
+}
+
+/* #title-header {
+    font-family: , cursive;
+    font-size: 80px;
+    font-style: bold;
+    padding-top: 2cm;
+} */
 
 
 /*

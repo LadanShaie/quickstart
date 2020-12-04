@@ -2,12 +2,27 @@
 {% block title %}Budget Therapy Home{% endblock %}
 
 {% block body %}
-  <h1>Welcome!</h1>
-
-  <h2>Login or Create an Account</h2>
-
+<style>
+body {
+	background: url(/static/img/tree.jpeg) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;  
+}
+</style>
+<div class= "text-center" id= "homepage-img">
+  <div class="jumbotron col-lg-6 col-md-6 col-sm-6 col-xs-6 offset-0 float-md-center">
+    <h1 class="display-3">Budget Therapy</h1>
+    <br>   
+    <div class = "text-left offset-1 ">
     <form action="/" method='POST' >
-            <input type="submit" name="login" value="Login" />
-            <input type="submit" name="create_account" value="Create an account" />
+      <button type="submit" class="btn btn-success btn-lg" name="login" value="Login">Login</button>
+      <br> 
+      </br>
+      <button type="submit" class="btn btn-secondary btn-lg" name="create_account" value="Create an account"> Signup</button>
     </form>
+  </div>
+  </div>
+</div>
 {% endblock %}
