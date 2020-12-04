@@ -7,69 +7,79 @@
 <!-- #comeback here to add transactions page button + make sure to find way to update balance (look into drop down for accounts in new transaction form) balance= prev balance-new transaction amount) -->
 <div class="container-fluid">     
 
+    <div class ="row">
 
-    <div class="container-fluid">
-        <div class="Title text_left">
-        <label class="balance_box_title"><h2> Accounts</h2></label>
-        </div>
-   
-        <div class="content-center">
-            {% for account in accounts %}
-                {% if account.type == "depository" and account.available_balance != None %}
-                <h5>{{account.name}}........${{account.available_balance}}</h5>
-                {% endif %}  
-            {% endfor %}
-            <!-- <div class="text-left"> -->
-            <form action="/overview" method='POST' >
-                <button type="submit" class="btn btn-outline-warning" name="add_account_page" value="Add New Bank Account"> Add New Bank Account </button>
-            </form> 
-            <!-- </div> -->
-    </div>  
-
-
-   
-    <div class="row justify-content-center">
-        <label class="Title"><h1>Transaction History</h1></label>
-    </div>
-    <div class="text-left">
-        <input id="input" type="text" placeholder="Search..">
-        
-    </div>
-    <div class="text-right">
-        <form action="/overview" method='POST' >
-            <button type="submit" class="btn btn-warning" name="add_transactions_page" value="Add New Transaction">Add New Transaction</button>
-        </form> 
-    </div>
-        <form action="/overview" method='POST'>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">$ Amount</th>
-                    <th scope="col">Date</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-
-                </tr>
-                </thead>
-                <tbody id="transactionTable">
-                {% for t in transactions %}
-                    <tr>
-                    <td> {{t.merchant_name}} </td>
-                    <td> <input type= "hidden" name = "amount" value= "{{t.amount}}" > {{t.amount}} </td>
-                    <td>  {{t.date.strftime('%d-%m-%Y')}} </td>
-                    <td> <input type="hidden" name= "account_id"  value= "{{t.account_id}}"> </td>
-                    <td><button type= "submit" class="btn btn-outline-danger" name= "delete_transaction" value= "{{t.transaction_id}}" > Delete </button></td> 
-                    </tr>
+       <!-- Accounts -->
+        <div class="col-3 justify-content-center">
+            <div class="Title text-left offset-1">
+                <label class="balance_box_title"><h1> Accounts </h1></label>
+            </div>
+    
+            <div class="content-center">
+                {% for account in accounts %}
+                    <ul>
+                    {% if account.type == "depository" and account.available_balance != None %}
+                    <li><h5>{{account.name}}..........${{account.available_balance}}</h5></li>
+                    {% endif %}  
+                    </ul>
                 {% endfor %}
-                </tbody>
-            </table> 
-        </form>    
+                <div class="text-center"> 
+                    <form action="/overview" method='POST' >
+                        <button type="submit" class="btn btn-outline-secondary" name="add_account_page" value="Add New Bank Account"> Add New Bank Account </button>
+                    </form> 
+                </div> 
+            </div>  
+        </div>
 
-     <div class="row justify-content-center">
-        <form action="/overview" method='POST' >
-            <input type="submit" name="budgets_page" value="View My Budgets"/>
-        </form> 
+        <!-- Transactions  -->
+        <div class= "col-lg-9 col-md-9 col-sm-8 col-xs-8 justify-content-right">
+   
+            <div class="row justify-content-center"> 
+                <label class="Title"><h1>Transaction History</h1></label>
+            </div>
+            <br>
+            <div class= row>
+                <div class="col-6 text-left">
+                    <input id="input" type="text" placeholder="Search Name...">   
+                </div>
+                <div class="col-6 text-right">
+                    <form action="/overview" method='POST' >
+                        <button type="submit" class="btn btn-warning" name="add_transactions_page" value="Add New Transaction">Add New Transaction</button>
+                    </form> 
+                </div>
+            </div>
+                <form action="/overview" method='POST'>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">$ Amount</th>
+                            <th scope="col">Date</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+
+                        </tr>
+                        </thead>
+                        <tbody id="transactionTable">
+                        {% for t in transactions %}
+                            <tr>
+                            <td> {{t.merchant_name}} </td>
+                            <td> <input type= "hidden" name = "amount" value= "{{t.amount}}" > {{t.amount}} </td>
+                            <td>  {{t.date.strftime('%d-%m-%Y')}} </td>
+                            <td> <input type="hidden" name= "account_id"  value= "{{t.account_id}}"> </td>
+                            <td><button type= "submit" class="btn btn-outline-danger" name= "delete_transaction" value= "{{t.transaction_id}}" > Delete </button></td> 
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table> 
+                </form>    
+
+            <div class="row justify-content-center">
+                <form action="/overview" method='POST' >
+                    <input type="submit" name="budgets_page" value="View My Budgets"/>
+                </form> 
+            </div>
+        </div>  
     </div>
 </div>    
 
