@@ -79,7 +79,7 @@ def login_info():
     if user:  
         if password == user.password: 
             session['user_id'] = user.user_id
-            return redirect('/overview')
+            return redirect('/budgets')
     
     flash('Incorrect email or password. Please try again.')
     return redirect('/login')
@@ -151,8 +151,12 @@ def redirect_to_budgets():
     view_budgets_page = request.form.get('budgets_page')
     view_add_transaction_page = request.form.get("add_transactions_page")
     view_add_account_page = request.form.get("add_account_page")
-    delete_transaction= request.form.get("delete_transaction")
-    
+    transaction_id= request.form.get("delete_transaction")
+    print (transaction_id)
+    account_id= request.form.get("account_id")
+    print(account_id)
+    amount = request.form.get("amount")
+    print (amount)
 
     if  view_budgets_page == 'View My Budgets':
         return redirect('/budgets')
@@ -160,9 +164,15 @@ def redirect_to_budgets():
         return redirect('/add_transaction')
     if  view_add_account_page == 'Add New Bank Account':
         return redirect('/add_account')
-    if  delete_transaction == 41:
-        crud.delete_transaction(41) #how to link transaction_id if its autoincremented?
+    if  transaction_id != None :
+        transaction_id = int(transaction_id)
+        # Before transaction is deleted, update associated account balance through acccount_id
+        crud.update_account_balance_post_trans_deleted(account_id, amount) 
+        # delete transaction from db
+        crud.delete_transaction(transaction_id)
         flash('Transaction deleted!')
+        return redirect('/overview')
+    else: 
         return redirect('/overview')
 
 
@@ -188,9 +198,19 @@ def redirect_to_create_budget():
     """Navigate from budgets page"""
 
     view_create_budget_page = request.form.get('create_budget_page')
+    budget_id = request.form.get('delete_budget')
+
 
     if view_create_budget_page == 'Create A New Budget':
         return redirect('/create_budget')     
+    if  budget_id != None:
+        print (budget_id)
+        budget_id = int(budget_id)
+        crud.delete_budget(budget_id) 
+        flash('Budget deleted!')
+        return redirect('/budgets')
+    else: 
+        return redirect('/budgets')   
 
 
 ########### Create Budget page routes ###############
@@ -282,7 +302,7 @@ def save_added_transaction():
 
             # If new merchant_name, add the new merchant_name to merchant table 
             crud.create_merchant_name(merchant_name, user)
-            # The we can created a transaction using a new merchant_name.
+            # Then we can created a transaction using a new merchant_name.
             crud.create_transaction(amount, date, merchant_name, user, account_id)
             # After transaction is added, now we can update associated account balance through acccount_id
             crud.get_account_by_account_id (account_id, amount) 

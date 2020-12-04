@@ -40,30 +40,33 @@
             <input type="submit" name="add_transactions_page" value="Add New Transaction"/>
         </form> 
     </div>
+        <form action="/overview" method='POST'>
             <table class="table table-hover">
                 <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Amount</th>
+                    <th scope="col">$ Amount</th>
                     <th scope="col">Date</th>
+                
                 </tr>
                 </thead>
                 <tbody id="transactionTable">
                 {% for t in transactions %}
                     <tr>
                     <td> {{t.merchant_name}} </td>
-                    <td> {{t.amount}} </td>
+                    <td> <input type= "hidden" name = "amount" value= "{{t.amount}}" > {{t.amount}} </td>
                     <td>  {{t.date.strftime('%d-%m-%Y')}} </td>
+                    <td> <input type="hidden" name= "account_id"  value= "{{t.account_id}}"> </td>
                     <td>
-                        <form action="/overview" method='POST' >
-                            <input type="submit" class="submit-btn" name= "delete-transaction" id = {{t.transaction_id}} value="{{t.transaction_id}}">
-                        </form>
-                        </td> 
+                        <!-- <form action="/overview" method='POST'> -->
+                            <button class="submit-btn" name= "delete_transaction" value= "{{t.transaction_id}}" > Delete </button>
+                        <!-- </form> -->
+                    </td> 
                     </tr>
                 {% endfor %}
                 </tbody>
             </table> 
-
+        </form>    
 
      <div class="row justify-content-center">
         <form action="/overview" method='POST' >

@@ -53,11 +53,10 @@ def create_budget(status, spend_limit, start_date, end_date, user, merchant_name
   
     budget = Budget.query.filter(merchant_name==merchant_name, Budget.end_date >= datetime.now()).all()
     
-    # print (budget) for testing 
+    print (budget)  
     
     #check if it exists in database to avoid repeating PK, if not add it
     if not budget:
-        # print(status, spend_limit, start_date, end_date, user, merchant_name)
 
         budget = Budget(status=status,
                         spend_limit=spend_limit, 
@@ -129,28 +128,56 @@ def get_account_by_account_id (account_id, amount):
     
     account = Account.query.get(account_id) 
 
-    account.available_balance = (account.available_balance + int(amount))
+    # Remember transactions are negative so we add below  
+    account.available_balance = (account.available_balance + int(float(amount)))
 
     db.session.commit()
     
     return account 
 
-### Delete items ######
-def delete_transaction (transaction_id):
 
-    transaction = Transaction.query.filter_by(transaction_id=transaction_id).first()
-    db.session.delete(transaction)
-    print ("Transaction Deleted")
+# update account balance in db before selected transaction is deleted
+def update_account_balance_post_trans_deleted (account_id, amount): 
+    """Find account by account_id and add to-be-deleted transaction amount to available balance"""
+    
+    account = Account.query.get(account_id) 
+
+    # Remember transactions are negative so the two negatives cancel each other and it becomes addition 
+    account.available_balance = (account.available_balance - int(float(amount)))
+
     db.session.commit()
+    
+    return account 
+
+
+
+########### Delete A Transaction ##############
+def delete_transaction (transaction_id):
+    """ Delete Transaction by transaction_id """
+    
+    transaction = Transaction.query.filter(Transaction.transaction_id == transaction_id).first()
+    
+    db.session.delete(transaction)
+  
+    db.session.commit()
+    print ("Transaction Deleted") 
+    
     return transaction_id
 
-# def delete_budget (budget_id):
 
-#     budget = Budget.query.filter_by(budget_id=budget_id).one()
-#     db.session.delete(budget)
-#     db.session.commit()
+########### Delete A Budget ##############
+def delete_budget (budget_id):
+    """ Delete Budget by budget_id """
+    
+    budget = Budget.query.filter(Budget.budget_id == budget_id).first()
+    
+    
+    db.session.delete(budget)
+    
+    db.session.commit()
+    print ("Budget Deleted") 
 
-
+    return budget_id
 def get_all_budgets():
     """Return all budgets."""
 

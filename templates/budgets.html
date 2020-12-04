@@ -33,6 +33,7 @@
         <table class="table table-hover">
             <thead>
             <tr>
+                <th scope="col"></th>
                 <th scope="col">Name</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Start Date</th>
@@ -44,11 +45,17 @@
             {% for budget in budgets %}
                 {% if budget.end_date >= date_now %}
                     <tr>
+                    <td>
+                        <form action="/budgets" method='POST'>
+                            <button  class="submit-btn" name= "delete_budget" value= "{{ budget.budget_id }}" > Delete </button>
+                        </form>
+                    </td> 
                     <td> {{budget.merchant_name}} </td>
                     <td> ${{budget.spend_limit}} </td>
                     <td>  {{budget.start_date.strftime('%d-%m-%Y')}} </td>
                     <td>  {{budget.end_date.strftime('%d-%m-%Y')}} </td>
-                    <td class= "see_status" id= "{{ budget.budget_id }}">  View Status  </td>
+                    <td> <button class= "see_status" id= "{{ budget.budget_id }}">  View Status </button> </td>
+            
                     </tr>
                 
                 {% endif %}
@@ -78,7 +85,8 @@
                     <td> ${{budget.spend_limit}} </td>
                     <td>  {{budget.start_date.strftime('%d-%m-%Y')}} </td>
                     <td>  {{budget.end_date.strftime('%d-%m-%Y')}} </td>
-                    <td class= "see_status" id= "{{ budget.budget_id }}" > View Status </td>
+                    <td> <button class= "see_status" id= "{{ budget.budget_id }}" > View Status </button> </td>
+
                     </tr>
                 {% endif %} 
             {% endfor %}
