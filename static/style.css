@@ -49,8 +49,15 @@ body {
 }
 
 .form-group {
-	color: white
+	color: black
 
+}
+
+.Title {
+	font-family: 'BebasNeueRegular';
+	font-weight: normal;
+	font-style: normal;
+	margin-top: 20px;
 }
 
 /* #title-header {
