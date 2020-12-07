@@ -2,49 +2,66 @@
 {% block title %}Create A Budget Page{% endblock %}
 
 {% block body %}
-<h1>Create A Budget</h1>
+<style>
+    .display-4{
+        margin-top: 30px;
+        margin-left: 10px;
+        color: rgb(52, 51, 51)
+    }
+   
+    .form-group {
+      color: rgb(0, 0, 0)
+  
+  }
+</style>
 
-<form class="forms" name="budget_form" action='/create_budget' method="POST">
+<div class= "text-left" >
+    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 float-md-center">
+        <h1 class= "display-4">Create A Budget</h1>
+        <br>
+        <form class="forms" name="budget_form" action='/create_budget' method="POST">
 
-    <div class="container-fluid"> 
-        <!-- Merchant name form inputs required from user   -->    
-        <div class="form-group row">
-            <label for="-input" class="col-2 col-form-label">Select Merchant</label>
-            <div class="col-10">
-                <select class="input-box" name="selected_merchant">
-                    {% for merchant in merchants %}   
-                    <option type="text" name= "{{ merchant }}" > {{ merchant.merchant_name }} </option>
-                    {% endfor %}
-                </select>
+            <div class="container-fluid"> 
+                <!-- Merchant name form inputs required from user   -->    
+                <div class="form-group row">
+                    <label for="-input" class="col-2 col-form-label">Select Merchant</label>
+                    <div class="col-10">
+                        <select class="input-box" name="selected_merchant">
+                            {% for merchant in merchants %}   
+                            <option type="text" name= "{{ merchant }}" > {{ merchant.merchant_name }} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>  
+
+                <!-- Other form inputs required from user    -->
+                <div class="form-group row">
+                    <label for="example-number-input" class="col-2 col-form-label">Amount</label>
+                    <div class="col-10">
+                    <input class="form-control" type="number" name=amount id="amount-input">
+                    </div>
+                </div>  
+            
+                <div class="form-group row">
+                    <label for="example-date-input" class="col-2 col-form-label">Start Date</label>
+                    <div class="col-10">
+                    <input class="form-control" type="date" name=start_date id="start-date-input">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="example-date-input" class="col-2 col-form-label">End Date</label>
+                    <div class="col-10">
+                        <input class="form-control" type="date" name=end_date id="end-date-input">
+                    </div>
+                </div>
+                
+                <div class="row justify-content-center" >
+                    <input type="submit" class="submit-btn" name= "submit_budget_form" value="Submit">
+                </div>
+
             </div>
-        </div>  
-
-        <!-- Other form inputs required from user    -->
-        <div class="form-group row">
-            <label for="example-number-input" class="col-2 col-form-label">Amount</label>
-            <div class="col-10">
-              <input class="form-control" type="number" name=amount id="amount-input">
-            </div>
-        </div>  
-      
-        <div class="form-group row">
-            <label for="example-date-input" class="col-2 col-form-label">Start Date</label>
-            <div class="col-10">
-              <input class="form-control" type="date" name=start_date id="start-date-input">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label for="example-date-input" class="col-2 col-form-label">End Date</label>
-            <div class="col-10">
-                <input class="form-control" type="date" name=end_date id="end-date-input">
-            </div>
-        </div>
-          
-        <div class="row justify-content-center" >
-            <input type="submit" class="submit-btn" name= "submit_budget_form" value="Submit">
-        </div>
-
+        </form>   
     </div>
-</form>    
+</div>
 {% endblock %}

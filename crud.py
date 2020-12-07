@@ -129,7 +129,7 @@ def get_account_by_account_id (account_id, amount):
     account = Account.query.get(account_id) 
 
     # Remember transactions are negative so we add below  
-    account.available_balance = (account.available_balance + int(float(amount)))
+    account.available_balance = float(account.available_balance + float(amount))
 
     db.session.commit()
     
@@ -137,13 +137,14 @@ def get_account_by_account_id (account_id, amount):
 
 
 # update account balance in db before selected transaction is deleted
+# Reminder: Neeed to fix issue with past items that were added before i created this function. getting nonetype,int error
 def update_account_balance_post_trans_deleted (account_id, amount): 
     """Find account by account_id and add to-be-deleted transaction amount to available balance"""
     
     account = Account.query.get(account_id) 
-
+   
     # Remember transactions are negative so the two negatives cancel each other and it becomes addition 
-    account.available_balance = (account.available_balance - int(float(amount)))
+    account.available_balance = float(account.available_balance - float(amount))
 
     db.session.commit()
     
