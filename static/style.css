@@ -48,6 +48,14 @@ body {
 	color: #f5e7ce
 }
 
+.display-2 {
+	color: #f5e7ce
+}
+
+.display-4 {
+	color: #f5e7ce
+}
+
 .form-group {
 	color: black
 
@@ -60,12 +68,10 @@ body {
 	margin-top: 30px;
 }
 
-/* #title-header {
-    font-family: , cursive;
-    font-size: 80px;
-    font-style: bold;
-    padding-top: 2cm;
-} */
+.Accounts-side {
+	background-color: #e0e6e2;
+}
+
 
 
 /*

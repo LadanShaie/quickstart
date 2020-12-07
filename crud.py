@@ -208,7 +208,7 @@ def get_budget_status_by_budget_id(budget_id):
             sum_transactions += transaction.amount
             sum_transactions = abs(sum_transactions)
             #print (sum_transactions) #For testing  
-        print(budget.end_date)
+        
         
         
     if sum_transactions > budget.spend_limit:
@@ -233,6 +233,7 @@ def get_garden_alive_count():
 
         if (datetime.now() > budget.end_date) and (budget.status == "Tree is Alive"):
             count_alive += 1
+           
 
     return count_alive 
 
@@ -246,6 +247,7 @@ def get_garden_dead_count():
 
         if (datetime.now() > budget.end_date) and (budget.status == "Tree is Dead"):    
             count_dead += 1
+            
 
     return count_dead 
 
