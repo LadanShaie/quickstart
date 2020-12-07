@@ -47,11 +47,10 @@
     {% endif %}
 
     {% for msg in get_flashed_messages() %}
-    <p class="flash-msg">
+    <p class="flash-msg alert alert-warning" role= "alert">
       {{ msg }}
     </p>
     {% endfor %}
-  
     {% block body %}{% endblock %}
 
     {% block after_body %}{% endblock %}

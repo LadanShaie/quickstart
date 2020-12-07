@@ -24,13 +24,14 @@
             <div class="container-fluid"> 
                 <!-- Merchant name form inputs required from user   -->    
                 <div class="form-group row">
-                    <label for="-input" class="col-2 col-form-label">Select Merchant</label>
+                    <label for="-input" class="col-2 col-form-label"> Merchant Name</label>
                     <div class="col-10">
-                        <select class="input-box" name="selected_merchant">
+                        <input class="form-control" type="text" name="selected_merchant" >
+                        <!-- <select class="input-box" name="selected_merchant">
                             {% for merchant in merchants %}   
                             <option type="text" name= "{{ merchant }}" > {{ merchant.merchant_name }} </option>
                             {% endfor %}
-                        </select>
+                        </select> -->
                     </div>
                 </div>  
 

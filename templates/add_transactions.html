@@ -29,7 +29,7 @@
                         <select class="input-box" name="selected_account">
                             {% for account in accounts%}
                                 {% if account.type == "depository" and account.available_balance != None %}   
-                            <option type="text" name= "account_options" value= "{{ account.account_id }}" > {{ account.name }} </option>
+                            <option type="text" name= "account_options" value= "{{ account.account_id }}" > {{ account.name }} ${{account.available_balance}} </option>
                                 {% endif %}    
                             {% endfor %}
                         </select>
@@ -38,13 +38,16 @@
         
                 <!-- Merchant name form inputs required from user   -->    
                 <div class="form-group row">
-                    <label for="-input" class="col-2 col-form-label">Select Merchant</label>
+                    <label for="-input" class="col-2 col-form-label"> Merchant Name </label>
                     <div class="col-10">
-                        <select class="input-box" name="merchant_name">
+
+                        <input class="form-control" type="text" name="merchant_name" >
+                    
+                        <!-- <select class="input-box" name="merchant_name">
                             {% for merchant in merchants %}   
                             <option type="text" name= "{{ merchant }}" > {{ merchant.merchant_name }} </option>
                             {% endfor %}
-                        </select>
+                        </select> -->
                     </div>
                 </div>  
                             
