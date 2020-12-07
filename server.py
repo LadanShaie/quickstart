@@ -185,8 +185,8 @@ def get_budgets():
     if session.get('user_id'):
         user = crud.get_user_by_user_id(session['user_id'])
         date_now = datetime.now() 
-        count_alive = crud.get_garden_alive_count()
-        count_dead = crud.get_garden_dead_count()
+        count_alive = crud.get_garden_alive_count(user)
+        count_dead = crud.get_garden_dead_count(user)
 
         return render_template('budgets.html', user_name=user.user_name, budgets= user.budgets, date_now=date_now, count_alive=count_alive, count_dead=count_dead)
     else: 

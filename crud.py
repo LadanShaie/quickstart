@@ -224,10 +224,10 @@ def get_budget_status_by_budget_id(budget_id):
 
 
 
-def get_garden_alive_count():
+def get_garden_alive_count(user):
     """Return garden alive trees count."""
 
-    budgets = Budget.query.all()
+    budgets = Budget.query.filter(Budget.user_id==user.user_id).all()
 
     count_alive = 0
     for budget in budgets:
@@ -238,10 +238,10 @@ def get_garden_alive_count():
 
     return count_alive 
 
-def get_garden_dead_count():
+def get_garden_dead_count(user):
     """Return garden dead trees count."""
 
-    budgets = Budget.query.all()
+    budgets = Budget.query.filter(Budget.user_id==user.user_id).all()
     count_dead = 0
 
     for budget in budgets:
